@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Linter determinístico para as regras estruturais do SKILL.md (português do Brasil).
+"""Linter determinístico para as regras estruturais do SKILL.md (português europeu).
 
 Verifica só as regras que dispensam dicionário. Por decisão de projeto, nunca
 marca ressalvas nem modalidade (pode, poderia, talvez, deve ter, teria): a
@@ -7,21 +7,22 @@ skill trata o grau de certeza como conteúdo, e um linter que pressiona contra
 ressalvas acaba reescrevendo afirmações.
 
 Uso:
-    pts-lint.py ARQUIVO [ARQUIVO ...]
+    pts-lint.py FICHEIRO [FICHEIRO ...]
     echo "texto" | pts-lint.py [--json]
-    pts-lint.py --linha-de-base 5 ARQUIVO  # passa se houver 5 violações obrigatórias ou menos
-    pts-lint.py --desativar voz-passiva,tempo-composto ARQUIVO
-    pts-lint.py --ativar historico ARQUIVO # regras opcionais (veja REGRAS_OPCIONAIS)
-    pts-lint.py --max-palavras 30 ARQUIVO  # limite de palavras por frase (padrão 27)
-    pts-lint.py --resumo ARQUIVO ...       # contagem por arquivo, pior arquivo primeiro
+    pts-lint.py --linha-de-base 5 FICHEIRO  # passa se houver 5 violações obrigatórias ou menos
+    pts-lint.py --desativar voz-passiva,tempo-composto FICHEIRO
+    pts-lint.py --ativar historico FICHEIRO # regras opcionais (veja REGRAS_OPCIONAIS)
+    pts-lint.py --max-palavras 30 FICHEIRO  # limite de palavras por frase (predefinição 27)
+    pts-lint.py --max-frases 8 FICHEIRO     # limite de frases por parágrafo (predefinição 6)
+    pts-lint.py --resumo FICHEIRO ...       # contagem por ficheiro, pior ficheiro primeiro
     pts-lint.py --linguagem rust --partes docs,comentarios,mensagens src/lib.rs
-    pts-lint.py --ler-citacoes ARQUIVO     # analisa também o texto entre aspas
+    pts-lint.py --ler-citacoes FICHEIRO     # analisa também o texto entre aspas
     pts-lint.py --autoteste                # testes internos e documentos da skill
     pts-lint.py --ajuda
 
-Linguagens de entrada (`--linguagem`, ou pela extensão do arquivo):
+Linguagens de entrada (`--linguagem`, ou pela extensão do ficheiro):
 
-- markdown (padrão, também para texto puro e stdin): a prosa é lida por
+- markdown (predefinição, também para texto puro e stdin): a prosa é lida por
   parágrafo, então uma frase quebrada em várias linhas conta como uma frase.
   Blocos de código, fórmulas em bloco, comentários HTML, definições de link e
   front matter YAML ficam de fora. Código e fórmulas inline contam como uma
@@ -39,13 +40,13 @@ Linguagens de entrada (`--linguagem`, ou pela extensão do arquivo):
   falha (exemplo-sem-falha) se não tiver um achado obrigatório ou se faltar
   uma das regras listadas. A lista é opcional.
 - rust (`*.rs`): só a prosa é lida, nunca o código. `--partes` escolhe as
-  partes (padrão `docs,comentarios`):
+  partes (predefinição `docs,comentarios`):
     docs         `///`, `//!`, `/** */`, `/*! */` (lidos como Markdown, como no rustdoc)
     comentarios  `//`, `/* */` (linhas que parecem código comentado ficam de fora)
     mensagens    literais de string dentro de panic!/assert!/expect/println!/...
     literais     todo literal de string com três palavras ou mais
   Mensagens são texto de erro, então usam o limite estrito
-  (`--max-palavras-estrito`, padrão 22).
+  (`--max-palavras-estrito`, predefinição 22).
 
 Regras obrigatórias: ponto-e-virgula, frase-longa, locucao-prolixa,
 verbo-suporte, giria-tecnica, adjetivo-de-marketing, gerundismo (verbo de ação
@@ -59,8 +60,16 @@ locucao-verbal, palavra-ambigua, ser-estar, travessao, gerundismo (outros
 verbos), data-ambigua (dia/mês sem ano) e numero-ambiguo (três casas depois
 da vírgula). Elas nunca reprovam a execução.
 
+Regras do português europeu e da ISO 24495-1, todas consultivas:
+marca-do-brasil (vocabulário e gerúndio do Brasil), tratamento-pessoal
+("você", "tu"), sigla (sigla sem o nome por extenso na primeira ocorrência),
+titulo (nível saltado, título repetido ou longo), paragrafo-longo
+(`--max-frases`, predefinição 6), inciso (incisos entre o sujeito e o verbo, e
+parênteses longos a meio da frase) e passos-em-prosa. O gerundismo também
+cobre "vou estar a enviar".
+
 Sai com código 1 quando as violações obrigatórias passam da linha de base
-(padrão 0). Sai com código 2 em erro de uso, inclusive numa opção ou regra
+(predefinição 0). Sai com código 2 em erro de uso, inclusive numa opção ou regra
 desconhecida.
 """
 import bisect
@@ -101,7 +110,7 @@ NAO_PARTICIPIO = (r"(?!(?:cada|nada|vida|lado|dados|resultados?|estados?|signifi
                   r"|pedidos?|chamados?|legados?|mercados?|partidos?|ruídos?)\b)")
 # Objetos que a gíria técnica costuma acompanhar ("subir o servidor").
 OBJETO_TECNICO = (r"(?:servidor(?:es)?|serviços?|containers?|contêiner(?:es)?|ambientes?|aplicaç(?:ão|ões)|apps?"
-                  r"|código|branch(?:es)?|prs?|versão|build|pods?|cluster|banco|api|arquivos?|imagens?|imagem"
+                  r"|código|branch(?:es)?|prs?|versão|build|pods?|cluster|banco|api|ficheiros?|arquivos?|imagens?|imagem"
                   r"|deploy|sistemas?|máquinas?|instâncias?|processos?|jobs?)")
 # Verbos de ação pontual: "vou estar enviando" é gerundismo, "vai estar rodando durante a
 # janela" é um futuro durativo legítimo.
@@ -111,7 +120,7 @@ PONTUAIS = (r"(?:envi|mand|encaminh|transfer|retorn|pass|agend|providenci|cancel
 IR_ESTAR = (r"\b(?:vou|vai|vamos|vão|ia|iam|íamos|irei|irá|iremos|irão|iria|iriam|ir)\s+estar\s+"
             r"(?:(?:te|lhe|lhes|o|a|os|as|me|nos|vos|se)\s+)?")
 # Adjetivos que quase sempre descrevem um estado atual, que pede "estar". "Vazio" e
-# "ativo" ficam de fora: "são vazios por padrão" e "é ativo no plano pago" são essência.
+# "ativo" ficam de fora: "são vazios por omissão" e "é ativo no plano pago" são essência.
 ESTADOS = r"(?:disponíve(?:l|is)|indisponíve(?:l|is)|online|offline|fora do ar)"
 
 LOCUCOES = [
@@ -121,20 +130,26 @@ LOCUCOES = [
     (r"no sentido de\s+\w+(?:ar|er|ir)", "Locução prolixa. Use 'para'."),
     (r"de (?:forma|modo|maneira) a", "Locução prolixa. Use 'para'."),
     (r"tendo em vista", "Locução prolixa. Use 'porque' ou 'por causa de'."),
-    (r"(?:devido ao|em virtude do|em razão do|pelo|por conta do) fato de", "Locução prolixa. Use 'porque'."),
-    (r"em virtude d[eoa]s?(?!\s+fato\b)", "Locução prolixa. Use 'por' ou 'por causa de'."),
+    (r"(?:devido ao|em virtude do|em razão do|pelo|por conta do) fa[ct]to de", "Locução prolixa. Use 'porque'."),
+    (r"em virtude d[eoa]s?(?!\s+fa[ct]to\b)", "Locução prolixa. Use 'por' ou 'por causa de'."),
     (r"no que (?:diz respeito|se refere|tange|concerne) (?:a|à|ao|às|aos)", "Locução prolixa. Use 'sobre' ou 'em'."),
     (r"com relação (?:a|à|ao|às|aos)", "Locução prolixa. Use 'sobre'."),
     (r"no decorrer d[eoa]s?", "Locução prolixa. Use 'durante'."),
     (r"para poder(?:em|mos)?", "Locução prolixa. Use só 'para' e o verbo."),
     (r"a nível d[eoa]s?", "'A nível de' é modismo. Use 'em', 'no' ou 'sobre'."),
+    (r"por forma a", "Locução prolixa. Use 'para'."),
+    (r"com vista a", "Locução prolixa. Use 'para'."),
+    (r"tendo em conta", "Locução prolixa. Use 'porque' ou 'considerar'."),
+    (r"no âmbito d[eoa]s?", "Locução prolixa. Use 'em' ou 'durante'."),
+    (r"ao nível d[eoa]s?", "Locução prolixa. Use 'em' ou 'no'."),
+    (r"relativamente (?:a|à|ao|às|aos)", "Locução prolixa. Use 'sobre'."),
     (r"encontra(?:m)?-se", "Locução prolixa. Use 'está' ou 'estão'."),
     (r"trata-se d[eoa]s?", "Locução prolixa. Use 'é'."),
     (r"sendo que", "'Sendo que' encadeia ideias sem dizer a relação entre elas. Divida em duas frases "
                    "ou use o conector exato (porque, mas, e)."),
     (r"favor\s+\w+(?:ar|er|ir)", "Use o imperativo ('Verifique'), não 'Favor verificar'."),
     (r"(?:vale|é importante|cabe) (?:ressaltar|destacar|lembrar|mencionar|notar|observar|salientar) que",
-     "Expressão de preenchimento. Afirme o fato direto."),
+     "Expressão de preenchimento. Afirme o facto direto."),
 ]
 
 SUPORTE_FIXO = [
@@ -142,6 +157,8 @@ SUPORTE_FIXO = [
     (r"proced(?:e|em|a|am|er|eu|eram|erá|erão|eria|endo|ido|emos)\s+(?:a|à|ao|às|aos)\s+\w+",
      "Verbo-suporte. Use o verbo da ação ('remova', não 'proceda à remoção')."),
     (DAR + r"\s+início\b", "Verbo-suporte. Use 'iniciar' ou 'começar'."),
+    (DAR + r"\s+resposta\s+(?:a|à|ao|às|aos)\b", "Verbo-suporte. Use 'responder'."),
+    (r"lev(?:ar|a|am|e|em|ou|aram|ará|arão|ando|ado)\s+a\s+cabo\b", "Verbo-suporte. Use 'executar' ou 'concluir'."),
     (FAZER + r"\s+uso\b", "Verbo-suporte. Use 'usar'."),
     (r"lev(?:ar|a|am|e|em|ou|aram|ará|arão|ando|ado)\s+em\s+(?:consideração|conta)\b",
      "Verbo-suporte. Use 'considerar'."),
@@ -165,16 +182,16 @@ DECALQUES = [
      "'Suportar' significa 'aguentar'. Se o sentido é compatibilidade (support), use 'aceitar', "
      "'ser compatível com' ou 'oferecer suporte a'."),
     (r"mandatóri[oa]s?", "Decalque de 'mandatory'. Use 'obrigatório'."),
-    (r"randômic[oa]s?", "Decalque de 'random'. Use 'aleatório'."),
+    (r"rand[oô]mic[oa]s?", "Decalque de 'random'. Use 'aleatório'."),
     (r"requerimentos?", "Se o sentido é 'requirement', use 'requisito'. 'Requerimento' é um pedido formal."),
     (r"performances?", "Use 'desempenho'."),
     (r"delet(?:ar|a|am|e|em|ou|aram|ará|arão|ado|ada|ados|adas|ando)",
      "Use 'apagar' ('excluir' também quer dizer 'deixar de fora'), a menos que 'deletar' seja o termo "
-     "fixo da equipe."),
+     "fixo da equipa."),
     (r"set(?:ar|ou|aram|ado|ada|ados|adas|ando|am)", "Use 'definir' ou 'configurar'."),
     (r"start(?:ar|a|am|e|em|ou|aram|ado|ada|ando)", "Use 'iniciar'."),
     (r"print(?:ar|a|am|e|em|ou|aram|ado|ada|ando)",
-     "Use 'imprimir', 'exibir' ou 'capturar a tela', conforme o sentido."),
+     "Use 'imprimir', 'exibir' ou 'capturar o ecrã', conforme o sentido."),
     (r"customiz\w*", "Use 'personalizar'."),
     (r"alavanc(?:ar|a|am|ou|aram|ará|arão|ado|ada|ando)|alavanqu(?:e|em)",
      "'Alavancar' no sentido de 'leverage' é jargão. Use 'usar' ou 'aproveitar'."),
@@ -200,29 +217,65 @@ GIRIAS = [
      "'Derrubar' pode ser parar de propósito ou causar uma falha. Use 'parar', 'desligar' ou 'causar a falha de'."),
     (DAR + r"\s+(?:um|uma)\s+(?:push|pull|merge|commit|deploy|restart|reboot|refresh|reset|rollback|kill|start|stop"
      r"|ping|fetch|build|upgrade|checada|conferida|geral|tapa)\b",
-     "Gíria com 'dar um'. Use o verbo da ação: enviar, mesclar, reiniciar, verificar."),
+     "Gíria com 'dar um'. Use o verbo da ação: enviar, juntar, reiniciar, verificar."),
     (r"bat(?:er|e|em|a|am|eu|eram|endo|ido)\s+(?:n[oa]s?|em)\s+(?:\w+\s+)?"
      r"(?:endpoints?|api|servidor(?:es)?|serviços?|banco|url|rotas?|porta)\b",
-     "'Bater em' é gíria. Use 'chamar' ou 'enviar uma requisição a'."),
+     "'Bater em' é gíria. Use 'chamar' ou 'enviar uma pedido a'."),
+    (FAZER + r"\s+(?:um\s+)?(?:push|pull|merge|commit|deploy|restart|reboot|refresh|reset|rollback|kill|ping|fetch"
+     r"|build|upgrade)\b",
+     "Gíria com 'fazer'. Use o verbo da ação: enviar, juntar, reiniciar, verificar."),
+    (r"(?:pôr|põe|põem|pôs|ponha|ponham|ponho|meter|mete|metem|meteu|meta|metam)\s+(?:(?:o|a|os|as|um|uma|esse|essa|este|esta)\s+)?(?:\w+\s+)?"
+     + OBJETO_TECNICO + r"\s+a\s+(?:correr|funcionar|andar)\b",
+     "'Pôr a correr' é gíria. Use 'iniciar' ou 'executar'."),
     (DAR + r"\s+(?:pau|ruim|tilt)\b", "Gíria. Diga o que aconteceu: 'falhou', 'travou' ou 'retornou o erro X'."),
     (r"jog(?:ar|a|am|ue|uem|ou|aram|ando)\s+(?:(?:o|a|os|as|isso|isto|tudo)\s+)?(?:n[oa]s?|para\s+[oa]s?|pr[oa]s?)\s+"
-     r"(?:log|logs|lixo|banco|cache|fila|tela)\b",
-     "'Jogar em' é gíria. Use 'gravar no log', 'apagar' ou 'enviar à fila', conforme o sentido."),
+     r"(?:log|logs|lixo|banco|cache|fila|tela|ecrã)\b",
+     "'Jogar em' é gíria. Use 'gravar no registo', 'apagar' ou 'enviar para a fila', conforme o sentido."),
 ]
 
 # Locuções verbais idiomáticas: o sentido não vem das partes (Regra 9.3 do STE).
 LOCUCOES_VERBAIS = [
     (r"deix(?:ar|a|am|e|em|ou|aram|ará|arão|ando)\s+de\s+\w+(?:ar|er|ir)",
-     "'Deixar de' tem duas leituras: parar de ('deixou de rodar') ou não fazer ('deixou de enviar'). "
+     "'Deixar de' tem duas leituras: parar de ('deixou de executar') ou não fazer ('deixou de enviar'). "
      "Escreva 'parou de' ou 'não'."),
     (r"acab(?:ar|a|am|e|em|ou|aram|ará|arão|ando)\s+(?:com|por)\b",
      "'Acabar com' e 'acabar por' não dizem a ação (apagar? encerrar? resolver?). Use o verbo exato."),
     (r"(?:d(?:ar|á|ão|eu|eram|ava|ará|ando|ado)|dei)(?:-se)?\s+conta\s+d[eoa]s?\b",
      "'Dar conta de' pode ser conseguir fazer ou perceber. Use 'conseguir' ou 'perceber'."),
     (r"(?:dá|dava|deu|daria)\s+(?:para|pra)\s+\w+(?:ar|er|ir)\b",
-     "'Dá para' pode ser possibilidade ou permissão. Use 'é possível' ou 'você pode'."),
+     "'Dá para' pode ser possibilidade ou permissão. Use 'é possível' ou 'pode'."),
     (r"fic(?:ar|a|am|ou|aram|ará|arão)\s+de\s+\w+(?:ar|er|ir)\b",
      "'Ficar de' é uma promessa informal. Diga se a ação aconteceu ou se ela está prevista."),
+]
+
+# Vocabulário e construções do português do Brasil. Em pt-PT, cada uma tem uma forma própria.
+BRASILEIRISMOS = [
+    (r"arquivos?", "Em Portugal, 'ficheiro'. 'Arquivo' é um conjunto de documentos guardados."),
+    (r"telas?", "Em Portugal, 'ecrã'."),
+    (r"equipes?", "Em Portugal, 'equipa'."),
+    (r"usuári[oa]s?", "Em Portugal, 'utilizador'."),
+    (r"requisiç(?:ão|ões)", "Em Portugal, 'pedido'."),
+    (r"senhas?", "Para uma credencial, use 'palavra-passe'."),
+    (r"baix(?:ar|e|em|ou|aram|ando|ado|ada|ados|adas)", "Para obter um ficheiro, use 'descarregar'. 'Baixar' é diminuir."),
+    (r"salv(?:ar|e|em|ou|aram|ando|ado|ada|ados|adas)", "Para gravar um ficheiro, use 'guardar'. 'Salvar' é resgatar."),
+    (r"acess(?:ar|e|em|ou|aram|ando|ado|ada|ados|adas)", "Em Portugal, 'aceder'."),
+    (r"cadastr(?:ar|e|em|ou|aram|ando|ado|ada|ados|adas|o|os)", "Em Portugal, 'registar' ou 'inscrever'."),
+    (r"gerenci(?:ar|a|am|e|em|ou|aram|ando|ado|ada|ados|adas|amento)", "Em Portugal, 'gerir' ou 'gestão'."),
+    (r"rod(?:ar|am|em|ou|aram|ando|ado|ada|ados|adas)",
+     "'Rodar' é do Brasil. Use 'executar' ('correr' também quer dizer fluir)."),
+    (r"mouses?", "Em Portugal, 'rato'."),
+    (r"celulares?", "Em Portugal, 'telemóvel'."),
+    (r"contatos?", "Em Portugal, 'contacto'."),
+    (r"fatos?", "Em Portugal, 'facto'."),
+    (r"recepç(?:ão|ões)", "Em Portugal, 'receção'."),
+    (r"seç(?:ão|ões)", "Em Portugal, 'secção'."),
+    (r"aspectos?", "Em Portugal, 'aspeto'."),
+    (r"perspectivas?", "Em Portugal, 'perspetiva'."),
+    (r"respectiv[oa]s?", "Em Portugal, 'respetivo'."),
+    (r"(?:estou|está|estás|estamos|estão|estava|estavam|estive|esteve|estiveram|estará|estarão|esteja|estejam)\s+"
+     r"(?:\w+mente\s+)?(?!(?:quando|comando|brando|bando|adendo|dividendo|remendo|tremendo|lindo|infindo"
+     r"|contrabando|fundo|mundo)\b)\w{3,}(?:ando|endo|indo)",
+     "Gerúndio de ação em curso, do Brasil. Em Portugal, 'estar a' + infinitivo ('está a executar')."),
 ]
 
 PASSIVA_SE = ("recomenda sugere deve pode utiliza usa verifica observa nota considera espera sabe realiza "
@@ -267,7 +320,14 @@ RULES = [
     ("gerundismo", CONSULTIVA,
      re.compile(IR_ESTAR + r"(?!" + PONTUAIS + r"(?:ando|endo|indo)\b)\w+(?:ando|endo|indo)\b", re.I),
      "Possível gerundismo. Se a ação é pontual, use o futuro (enviaremos) ou 'ir' + infinitivo (vamos enviar). "
-     "Se a ação dura um período ('vai estar rodando durante a janela'), mantenha."),
+     "Se a ação dura um período ('vai estar a executar durante a janela'), mantenha."),
+    ("gerundismo", OBRIGATORIA,
+     re.compile(IR_ESTAR + r"a\s+" + PONTUAIS + r"(?:ar|er|ir)\b", re.I),
+     "Gerundismo. Use o futuro simples (enviaremos) ou 'ir' + infinitivo (vamos enviar)."),
+    ("gerundismo", CONSULTIVA,
+     re.compile(IR_ESTAR + r"a\s+(?!" + PONTUAIS + r"(?:ar|er|ir)\b)\w{3,}(?:ar|er|ir)\b", re.I),
+     "Possível gerundismo. Se a ação é pontual, use o futuro (enviaremos) ou 'ir' + infinitivo (vamos enviar). "
+     "Se a ação dura um período ('vai estar a executar durante a janela'), mantenha."),
     *[("giria-tecnica", OBRIGATORIA, re.compile(r"\b" + pattern, re.I), message) for pattern, message in GIRIAS],
     ("data-ambigua", OBRIGATORIA,
      re.compile(r"(?<![\w/.-])\d{1,2}[/-]\d{1,2}[/-](?:\d{4}|\d{2})(?![\w/-]|[.,]\d)"),
@@ -276,7 +336,7 @@ RULES = [
      re.compile(r"(?<![\w/.,-])(?!24/7\b)(?=\d{2}/\d|\d/\d{2})(?:0?[1-9]|[12]\d|3[01])/(?:0?[1-9]|1[0-2])"
                 r"(?![\w/-]|[.,]\d)"),
      "Se isto é uma data, '07/10' pode ser 7 de outubro ou 10 de julho. Use AAAA-MM-DD ou, sem o ano, "
-     "o mês abreviado (07/Out)."),
+     "o mês por extenso (7 de outubro)."),
     ("numero-ambiguo", OBRIGATORIA,
      # Um só grupo depois do ponto e nenhuma vírgula decimal: "1.000" pode ser 1,0.
      re.compile(r"(?<![\w.,/])(?<!nº )(?<!n\.º )(?<!n° )\d{1,3}\.\d{3}(?![\w/]|[.,]\d)"),
@@ -290,8 +350,8 @@ RULES = [
      re.compile(r"\b(?:todes|elus?|delus?|nelus?|aquelus?|daquelus?|menines|amigues|alunes|usuáries|funcionáries"
                 r"|obrigade|querides|bem-vindes|todx|elx|delx|nelx|aquelx|amigx|alunx|meninx|usuárix|funcionárix"
                 r"|obrigadx|queridx|bem-vindx|[a-zà-ú]+xs)\b|\b[a-zà-ú]+@s?(?![\w@-]|\.\w)", re.I),
-     "Forma de gênero fora da norma (VOLP, Acordo Ortográfico). Use o masculino genérico ('os usuários') ou "
-     "um nome sem flexão de gênero ('a equipe', 'quem usa')."),
+     "Forma de género fora da norma (VOP, Acordo Ortográfico). Use o masculino genérico ('os utilizadores') ou "
+     "um nome sem flexão de género ('a equipa', 'quem usa')."),
     ("voz-passiva", CONSULTIVA,
      re.compile(r"\b(?:é|são|foi|foram|era|eram|será|serão|seria|seriam|seja|sejam|fosse|fossem|for|forem"
                 r"|sido|sendo|ser)\s+(?:\w+mente\s+)?" + NAO_PARTICIPIO + PARTICIPIO + r"\b", re.I),
@@ -309,7 +369,7 @@ RULES = [
                 + r"(?![\w]*[áàâãéêíóôõú]\w*(?:ad|id)o\b)(?:\w+(?:ad|id|íd)o|feito|escrito|aberto|posto|visto"
                 r"|dito|coberto|aceito|entregue|pago|gasto|ganho|impresso|eleito|suspenso|preso|solto|extinto"
                 r"|expresso|aceso|salvo)\b", re.I),
-     "Tempo composto. 'Tem falhado' indica repetição até agora. Para um fato único, use o "
+     "Tempo composto. 'Tem falhado' indica repetição até agora. Para um facto único, use o "
      "pretérito perfeito (falhou). Se a repetição é o ponto, mantenha e sinalize."),
     ("cadeia-de-preposicoes", CONSULTIVA,
      re.compile(r"\b" + INICIO_DE + ELO_DE * 2 + DE + r"\s+\w+", re.I),
@@ -338,11 +398,27 @@ RULES = [
     ("palavra-ambigua", CONSULTIVA,
      re.compile(r"\bexclu(?:ir|i|is|ímos|em|o|a|as|am|amos|iu|íram|iram|ía|íam|irá|irão|iria|iriam|indo|ído|ída"
                 r"|ídos|ídas|isse|issem)\b", re.I),
-     "'Excluir' tem dois sentidos: apagar ('exclua o arquivo') e deixar de fora ('exclua o arquivo do "
+     "'Excluir' tem dois sentidos: apagar ('exclua o ficheiro') e deixar de fora ('exclua o ficheiro do "
      "pacote'). Use 'apagar' ou 'não incluir'."),
     ("ser-estar", CONSULTIVA,
      re.compile(r"\b(?:é|são|era|eram|foi|foram|será|serão|seja|sejam)\s+(?:\w+mente\s+)?" + ESTADOS + r"\b", re.I),
      "Um estado atual pede 'estar' ('o servidor está indisponível'). 'Ser' descreve o que a coisa é sempre."),
+    ("tratamento-pessoal", CONSULTIVA,
+     re.compile(r"\b(?:você|vocês|tu|teu|tua|teus|tuas|contigo)\b", re.I),
+     "Tratamento impessoal: use o imperativo sem pronome ('Abra o ficheiro') ou a terceira pessoa "
+     "('A ferramenta abre o ficheiro')."),
+    ("inciso", CONSULTIVA,
+     # "O servidor, caso o token, emitido pelo serviço, tenha expirado, rejeita o pedido."
+     re.compile(r"(?:^|(?<=[.!?] ))(?:O|A|Os|As|Um|Uma)\s+\w+(?:\s+\w+)?,\s+(?:caso|se|quando|embora|que|cujo|cuja|onde)\b"
+                r"[^.!?]{25,}?,\s+\w+"),
+     "Um inciso entre o sujeito e o verbo corta a ideia principal. Ponha a condição ou a explicação "
+     "numa frase própria."),
+    ("passos-em-prosa", CONSULTIVA,
+     re.compile(r"\b(?:primeiro|primeiramente)\b.*?\b(?:depois|em seguida|a seguir|seguidamente)\b.*?"
+                r"\b(?:por fim|finalmente|por último|no fim)\b", re.I),
+     "Passos em prosa corrida. Use uma lista numerada, com uma instrução por item."),
+    *[("marca-do-brasil", CONSULTIVA, re.compile(r"\b(?:" + pattern + r")\b", re.I), message)
+      for pattern, message in BRASILEIRISMOS],
     ("travessao", CONSULTIVA,
      re.compile(r"(?<=\S)\s*—\s*(?=\S)|(?<=\S)\s+–\s+(?=\S)"),
      "O travessão junta duas ideias (frase encadeada). Considere duas frases, dois-pontos ou parênteses."),
@@ -361,11 +437,11 @@ OPTIONAL_RULES = [
 
 # Regras calculadas fora da tabela RULES.
 DERIVED_RULES = {"frase-longa", "rotacao-de-sinonimos", "conjuncao-pendente", "exemplo-sem-falha",
-                 "diretiva-invalida"}
+                 "diretiva-invalida", "sigla", "titulo", "paragrafo-longo"}
 KNOWN_RULES = {rule[0] for rule in RULES} | {rule[0] for rule in OPTIONAL_RULES} | DERIVED_RULES
 
 # Uma palavra, um significado: grupos de verbos que costumam se alternar para
-# a mesma ação. Só entram verbos de fato intercambiáveis. Erro, falha e defeito
+# a mesma ação. Só entram verbos de facto intercambiáveis. Erro, falha e defeito
 # são conceitos diferentes e ficam de fora.
 SYNONYM_GROUPS = [
     ("verificar", "conferir", "checar", "validar", "confirmar"),
@@ -379,7 +455,10 @@ SYNONYM_GROUPS = [
     ("enviar", "mandar", "transmitir", "remeter"),
     ("obter", "pegar"),
     ("alterar", "modificar", "mudar"),
-    ("salvar", "gravar"),
+    ("guardar", "gravar", "salvar"),
+    ("executar", "correr", "rodar"),
+    ("descarregar", "baixar"),
+    ("aceder", "acessar"),
 ]
 
 # Formas irregulares que o gerador de conjugação não produz.
@@ -403,6 +482,11 @@ FULL_FORMS = {
 EXCLUDED_FORMS = {
     "parar": {"para", "paras", "parado", "parada", "parados", "paradas"},
     "salvar": {"salvo"},
+    "guardar": {"guarda", "guardas"},
+    "correr": {"corro", "corre", "corres", "corrida", "corridas"},
+    "rodar": {"roda", "rodas", "rodo"},
+    "baixar": {"baixo", "baixa", "baixas"},
+    "acessar": {"acesso"},
 }
 # Formas verbais que também são substantivos ("o uso", "o envio").
 NOUN_HOMOGRAPHS = {"uso", "usos", "envio", "envios", "começo", "começos", "conserto", "consertos",
@@ -410,6 +494,15 @@ NOUN_HOMOGRAPHS = {"uso", "usos", "envio", "envios", "começo", "começos", "con
                    "cheque", "cheques", "mostra", "mostras"}
 
 MAX_WORDS = 27  # descrições: 25 do STE × 1,07 do português, para cima. O de instruções é 22, mas o linter não sabe distinguir.
+MAX_SENTENCES = 6  # frases por parágrafo (ISO 24495-1, 5.3.5: um tópico por parágrafo)
+MIN_PARENTHETICAL_WORDS = 6
+PARENTHETICAL = re.compile(r"\([^()\n]+\)(?=\s+[a-zà-ú])")  # só se a frase continua depois
+MAX_HEADING_WORDS = 12  # palavras por título (ISO 24495-1, 5.2.4: títulos curtos)
+# Siglas que o leitor técnico conhece. Qualquer outra pede o nome por extenso na primeira ocorrência.
+ACRONYM = re.compile(r"(?<![\w-])[A-ZÀ-Ý]{2,6}(?![\w-])")
+COMMON_ACRONYMS = set("""API URL URI HTTP HTTPS JSON XML YAML HTML CSS SQL CPU GPU RAM SSH TLS SSL UTF PDF ID IP DNS
+TCP UDP CLI GUI UI UX SDK IDE OK ISO SI IA UE EUA NP USB LED PIN GPS SMS UTC CSV TOML REST UUID ASCII""".split())
+HEADING_LEVEL = re.compile(r"^ {0,3}(#{1,6})(?:\s+(.*?))?\s*#*\s*$")
 MAX_WORDS_STRICT = 22  # 20 do STE × 1,07, para cima. Mensagens de erro (`mensagens` do rust) são texto do modo Estrito
 
 CODE_FENCE = re.compile(r"^(```|~~~)")
@@ -497,7 +590,7 @@ def _verb_re(infinitive):
 
 VERB_PATTERNS = {verb: _verb_re(verb) for group in SYNONYM_GROUPS for verb in group}
 
-# A rotação de sinônimos trata de *verbos*. Um determinante antes de um
+# A rotação de sinónimos trata de *verbos*. Um determinante antes de um
 # homógrafo marca um substantivo ("o uso", "cada envio"), e "de" depois também
 # ("uso de memória"). Um hífen antes marca uma palavra composta ("pré-envio").
 NOUN_CUE = re.compile(r"\b(?:o|a|os|as|um|uma|uns|umas|este|esta|estes|estas|esse|essa|esses|essas|aquele"
@@ -510,7 +603,7 @@ NOUN_AFTER = re.compile(r"^(?:\s+d[eoa]s?\b|\s*[:)\]]|\s*$)", re.I)
 
 
 def _verb_match(pattern, text):
-    """Primeira ocorrência de um membro do grupo de sinônimos que se lê como verbo."""
+    """Primeira ocorrência de um membro do grupo de sinónimos que se lê como verbo."""
     for m in pattern.finditer(text):
         before = text[:m.start()]
         if before.endswith("-"):
@@ -664,7 +757,7 @@ def _dangling_conjunction_findings(text, filename):
                 finding_line = end_line_index + 1
                 finding_col = raw_conjunction.start() + 1 if raw_conjunction else 1
             findings.append({
-                "arquivo": filename,
+                "ficheiro": filename,
                 "linha": finding_line,
                 "coluna": finding_col,
                 "regra": "conjuncao-pendente",
@@ -1047,6 +1140,38 @@ def _rust_blocks(src, parts):
     return blocks
 
 
+def _heading_findings(lines, filename):
+    """Títulos que saltam de nível, que se repetem ou que são longos demais (ISO 24495-1, 5.2.4)."""
+    findings, seen, previous, fence = [], {}, 0, False
+    for lineno, col0, raw in lines:
+        stripped = raw.strip()
+        if CODE_FENCE.match(stripped):
+            fence = not fence
+            continue
+        if fence:
+            continue
+        m = HEADING_LEVEL.match(raw)
+        if not m:
+            continue
+        level, text = len(m.group(1)), (m.group(2) or "").strip()
+        words = len([token for token in text.split() if WORD.search(token)])
+        problems = []
+        if previous and level > previous + 1:
+            problems.append(f"O título salta do nível {previous} para o nível {level}. Use o nível {previous + 1}.")
+        if text.casefold() in seen:
+            problems.append(f"O título repete o da linha {seen[text.casefold()]}. Use títulos que descrevem "
+                            f"cada secção.")
+        if words > MAX_HEADING_WORDS:
+            problems.append(f"O título tem {words} palavras (limite {MAX_HEADING_WORDS}). Um título curto "
+                            f"facilita a leitura em diagonal.")
+        seen.setdefault(text.casefold(), lineno)
+        previous = level
+        for message in problems:
+            findings.append({"ficheiro": filename, "linha": lineno, "coluna": col0 + m.start(1) + 1,
+                             "regra": "titulo", "nivel": CONSULTIVA, "trecho": text, "mensagem": message})
+    return findings
+
+
 def _sentence_spans(text):
     """Devolve (início, fim) de cada frase de um parágrafo, sem cortar em abreviações."""
     start = 0
@@ -1060,7 +1185,7 @@ def _sentence_spans(text):
 
 
 def lint(text, filename="<stdin>", lang=None, parts=None, max_words=MAX_WORDS,
-         max_words_strict=MAX_WORDS_STRICT, enabled=(), read_quotes=False):
+         max_words_strict=MAX_WORDS_STRICT, enabled=(), read_quotes=False, max_sentences=MAX_SENTENCES):
     """Analisa um documento. Devolve (achados, total_de_palavras)."""
     if lang is None:
         lang = "rust" if filename.endswith(".rs") else "markdown"
@@ -1076,11 +1201,12 @@ def lint(text, filename="<stdin>", lang=None, parts=None, max_words=MAX_WORDS,
 
     findings = []
     words_total = 0
-    # primeira ocorrência de cada membro de grupo de sinônimos: (grupo, verbo) -> (linha, coluna, trecho)
+    # primeira ocorrência de cada membro de grupo de sinónimos: (grupo, verbo) -> (linha, coluna, trecho)
     seen_synonyms = {}
+    seen_acronyms = set()
 
     def finding(line, col, rule, level, match, message, **extra):
-        findings.append({"arquivo": filename, "linha": line, "coluna": col, "regra": rule,
+        findings.append({"ficheiro": filename, "linha": line, "coluna": col, "regra": rule,
                          "nivel": level, "trecho": match, "mensagem": message, **extra})
 
     for block in blocks:
@@ -1104,6 +1230,19 @@ def lint(text, filename="<stdin>", lang=None, parts=None, max_words=MAX_WORDS,
             for rule_id, level, pattern, message in rules:
                 for m in pattern.finditer(masked):
                     finding(*at(m.start()), rule_id, level, raw[m.start():m.end()].strip(), message)
+            for m in ACRONYM.finditer(masked):
+                name = m.group(0)
+                spot = at(m.start())
+                if name in seen_acronyms or region_of(spot[0]):
+                    continue
+                seen_acronyms.add(name)
+                before, after = masked[:m.start()].rstrip(), masked[m.end():].lstrip()
+                if (name in COMMON_ACRONYMS or before.endswith("(") or after.startswith(")")
+                        or after.startswith("(")):
+                    continue
+                finding(*spot, "sigla", CONSULTIVA, name,
+                        f"A sigla {name} aparece sem o nome por extenso. Escreva o nome na primeira "
+                        f"ocorrência, por exemplo 'tempo de vida (TTL)'.")
             for gi, group in enumerate(SYNONYM_GROUPS):
                 for verb in group:
                     m = _verb_match(VERB_PATTERNS[verb], masked)
@@ -1112,8 +1251,16 @@ def lint(text, filename="<stdin>", lang=None, parts=None, max_words=MAX_WORDS,
                         spot = (*at(m.start()), m.group(0))
                         if (gi, verb) not in seen_synonyms or spot < seen_synonyms[(gi, verb)]:
                             seen_synonyms[(gi, verb)] = spot
+            # Um parêntesis longo a meio da frase corta a ideia principal (ISO 24495-1, 5.3.3 a).
+            for m in PARENTHETICAL.finditer(masked):
+                if len([token for token in m.group(0).split() if WORD.search(token)]) >= MIN_PARENTHETICAL_WORDS:
+                    finding(*at(m.start()), "inciso", CONSULTIVA, raw[m.start():m.end()].strip(),
+                            f"Um parêntesis com {MIN_PARENTHETICAL_WORDS} palavras ou mais, a meio da frase, corta "
+                            f"a ideia principal. Ponha o conteúdo numa frase própria.")
+            sentences = 0
             for begin, end in _sentence_spans(masked):
                 sentence = masked[begin:end]
+                sentences += bool(sentence.strip())
                 n = len([token for token in sentence.split() if WORD.search(token)])
                 words_total += n
                 if n > cap:
@@ -1123,13 +1270,20 @@ def lint(text, filename="<stdin>", lang=None, parts=None, max_words=MAX_WORDS,
                     finding(*at(begin + lead), "frase-longa", OBRIGATORIA, f"{n} palavras",
                             f"A frase tem {n} palavras (limite {cap}). Divida-a.",
                             excerto=excerpt[:80] + ("…" if len(excerpt) > 80 else ""))
+            if sentences > max_sentences:
+                lead = len(masked) - len(masked.lstrip())
+                finding(*at(lead), "paragrafo-longo", CONSULTIVA, f"{sentences} frases",
+                        f"O parágrafo tem {sentences} frases (limite {max_sentences}). Um parágrafo trata de um "
+                        f"só tópico. Divida-o.")
+        if kind == "markdown":
+            findings.extend(_heading_findings(block["lines"], filename))
         # Blocos de rustdoc e de string são pequenos documentos Markdown.
         virtual = "\n".join(content for _, _, content in block["lines"])
         for f in _dangling_conjunction_findings(virtual, filename):
             lineno, col0, _ = block["lines"][f["linha"] - 1]
             f["linha"], f["coluna"] = lineno, col0 + f["coluna"]
             findings.append(f)
-    # rotação de sinônimos: marca cada membro depois do primeiro, na primeira ocorrência dele
+    # rotação de sinónimos: marca cada membro depois do primeiro, na primeira ocorrência dele
     for gi, group in enumerate(SYNONYM_GROUPS):
         present = [(seen_synonyms[(gi, v)], v) for v in group if (gi, v) in seen_synonyms]
         if len(present) > 1:
@@ -1171,7 +1325,7 @@ def report(findings, words_total, as_json, hard_count, baseline):
         return
     for f in findings:
         detail = f"{f['trecho']}: {f['excerto']}" if "excerto" in f else f["trecho"]
-        print(f"{f['arquivo']}:{f['linha']}:{f['coluna']} {f['regra']}: {f['mensagem']} [{detail}]")
+        print(f"{f['ficheiro']}:{f['linha']}:{f['coluna']} {f['regra']}: {f['mensagem']} [{detail}]")
     print(f"\n{len(findings)} violações ({hard_count} obrigatórias, linha de base {baseline}), "
           f"{words_total} palavras, {rate} por 100 palavras")
     print("Ressalvas e modalidade (pode, poderia, talvez, deve ter) nunca são marcadas: "
@@ -1179,9 +1333,9 @@ def report(findings, words_total, as_json, hard_count, baseline):
 
 
 def report_summary(per_file):
-    """Uma linha por arquivo, com o maior número de violações obrigatórias primeiro."""
+    """Uma linha por ficheiro, com o maior número de violações obrigatórias primeiro."""
     rows = sorted(per_file, key=lambda row: (-row[1], -row[2], row[0]))
-    print(f"{'obrig':>5} {'cons':>5} {'palavras':>8}  arquivo")
+    print(f"{'obrig':>5} {'cons':>5} {'palavras':>8}  ficheiro")
     for path, hard, advisory, words in rows:
         print(f"{hard:>5} {advisory:>5} {words:>8}  {path}")
 
@@ -1201,7 +1355,7 @@ def selftest():
                      "voz-passiva", "gerundismo", "tempo-composto"):
         assert expected in rules, expected
     # ressalvas nunca são marcadas, inclusive modal + infinitivo composto
-    findings, _ = lint("A requisição pode ter falhado. Pode ser um timeout. O disco talvez tenha enchido. "
+    findings, _ = lint("A pedido pode ter falhado. Pode ser um timeout. O disco talvez tenha enchido. "
                        "O servidor deve ter travado. O processo pode estar travando. O job teria falhado.")
     assert findings == [], findings
     # blocos de código ficam de fora
@@ -1248,7 +1402,7 @@ def selftest():
     findings, _ = lint("   - Inicie a tarefa e", filename="fixture.md")
     dangling = [f for f in findings if f["regra"] == "conjuncao-pendente"]
     assert len(dangling) == 1 and dangling[0]["coluna"] == 4, dangling
-    assert dangling[0]["arquivo"] == "fixture.md"
+    assert dangling[0]["ficheiro"] == "fixture.md"
     assert dangling[0]["trecho"].endswith("e")
     assert "Complete o item" in dangling[0]["mensagem"]
     findings, _ = lint("100. Inicie a tarefa e\n  texto solto")
@@ -1295,8 +1449,8 @@ def selftest():
     assert len(long_sentences) == 1, long_sentences
     assert long_sentences[0]["trecho"] == "28 palavras", long_sentences
 
-    # rotação de sinônimos: o segundo membro é marcado, e o primeiro é o que fica
-    findings, _ = lint("Verifique o arquivo de configuração. Depois confira a saída. Confira duas vezes.")
+    # rotação de sinónimos: o segundo membro é marcado, e o primeiro é o que fica
+    findings, _ = lint("Verifique o ficheiro de configuração. Depois confira a saída. Confira duas vezes.")
     rot = [f for f in findings if f["regra"] == "rotacao-de-sinonimos"]
     assert len(rot) == 1 and "'conferir' e 'verificar'" in rot[0]["mensagem"], rot
     # um termo usado de forma consistente: nada a marcar
@@ -1304,10 +1458,10 @@ def selftest():
     assert not any(f["regra"] == "rotacao-de-sinonimos" for f in findings)
     # substantivos, preposições e formas fixas não são rotação de verbos
     findings, _ = lint("Inicie o job. Registre o começo e cada começo. O uso de memória cresce. "
-                       "Utilize o cache. Salve o arquivo, salvo se o disco estiver cheio. "
-                       "Abra o arquivo para ler.")
+                       "Utilize o cache. Salve o ficheiro, salvo se o disco estiver cheio. "
+                       "Abra o ficheiro para ler.")
     assert not any(f["regra"] == "rotacao-de-sinonimos" for f in findings), findings
-    findings, _ = lint("Use o arquivo para testes. Interrompa o job.")
+    findings, _ = lint("Use o ficheiro para testes. Interrompa o job.")
     assert not any(f["regra"] == "rotacao-de-sinonimos" for f in findings), findings
     findings, _ = lint("Pare o job para liberar memória. Interrompa o outro job.")
     assert any(f["regra"] == "rotacao-de-sinonimos" and f["trecho"] == "Interrompa" for f in findings), findings
@@ -1317,11 +1471,11 @@ def selftest():
     assert any(f["regra"] == "rotacao-de-sinonimos" and f["trecho"] == "consertou" for f in findings), findings
     findings, _ = lint("Verifique-o. Depois confira-o.")
     assert any(f["regra"] == "rotacao-de-sinonimos" and f["trecho"] == "confira" for f in findings), findings
-    findings, _ = lint("Exclua o arquivo. O arquivo excluído some. Remova o diretório.")
+    findings, _ = lint("Exclua o ficheiro. O ficheiro excluído some. Remova o diretório.")
     assert [f["trecho"] for f in findings if f["regra"] == "rotacao-de-sinonimos"] == ["Remova"], findings
-    # rótulo por arquivo
+    # rótulo por ficheiro
     findings, _ = lint("a; b", filename="x.md")
-    assert findings[0]["arquivo"] == "x.md"
+    assert findings[0]["ficheiro"] == "x.md"
 
     # regras próprias do português
     assert "gerundismo" not in _rules_of("O processo pode estar travando.")
@@ -1333,28 +1487,28 @@ def selftest():
     assert "locucao-prolixa" in rules and "gerundio-encadeado" not in rules, rules
     assert "locucao-prolixa" in _rules_of("Favor verificar o log.")
     assert "locucao-prolixa" in _rules_of("O servidor encontra-se indisponível.")
-    assert "verbo-suporte" in _rules_of("Proceda à remoção do arquivo.")
+    assert "verbo-suporte" in _rules_of("Proceda à remoção do ficheiro.")
     assert "verbo-suporte" in _rules_of("Faça uso do cache.")
-    assert _rules_of("Proceda à remoção do arquivo.").count("verbo-suporte") == 1
+    assert _rules_of("Proceda à remoção do ficheiro.").count("verbo-suporte") == 1
     assert "verbo-suporte" in _rules_of("O agente deverá proceder ao consumo do artefato.")
     assert "verbo-suporte" not in _rules_of("Execute a função main. Faça o documento.")
     assert _rules_of("Faça menção ao erro.").count("verbo-suporte") == 1
     assert "passiva-sintetica" in _rules_of("Recomenda-se reiniciar o servidor.")
     assert "passiva-sintetica" not in _rules_of("Certifique-se de que o disco existe. Inscreva-se na lista.")
     assert "tempo-composto" not in _rules_of("O cliente tem chamado aberto. O teste tem resultado vazio.")
-    assert "voz-passiva" in _rules_of("O arquivo foi removido pelo agente.")
+    assert "voz-passiva" in _rules_of("O ficheiro foi removido pelo agente.")
     assert "voz-passiva" not in _rules_of("Os registros são dados sensíveis. O valor é válido. A rede é rápida.")
-    assert "o-mesmo" in _rules_of("Abra o arquivo e edite o conteúdo do mesmo.")
+    assert "o-mesmo" in _rules_of("Abra o ficheiro e edite o conteúdo do mesmo.")
     assert "o-mesmo" in _rules_of("Verifique se o mesmo está parado.")
-    assert "o-mesmo" not in _rules_of("Use o mesmo arquivo. O mesmo vale para o cache. O valor é o mesmo.")
+    assert "o-mesmo" not in _rules_of("Use o mesmo ficheiro. O mesmo vale para o cache. O valor é o mesmo.")
     assert "cadeia-de-preposicoes" in _rules_of("Abra a válvula de entrada do conjunto da bomba de combustível.")
-    assert "cadeia-de-preposicoes" not in _rules_of("Abra o arquivo de configuração do servidor.")
-    assert "cadeia-de-preposicoes" in _rules_of("Abra o arquivo de configuração do servidor de testes.")
+    assert "cadeia-de-preposicoes" not in _rules_of("Abra o ficheiro de configuração do servidor.")
+    assert "cadeia-de-preposicoes" in _rules_of("Abra o ficheiro de configuração do servidor de testes.")
     assert "cadeia-de-preposicoes" not in _rules_of(
-        "A Lei nº 15.263, de 14 de novembro de 2025. Fora do VOLP e das regras de concordância. "
+        "A Lei nº 15.263, de 14 de novembro de 2025. Fora do VOP e das regras de concordância. "
         "O dicionário de cerca de 900 palavras do ASD. O Manual de Comunicação da Secom do Senado. "
         "Copie para uma das pastas de skills do Claude.")
-    assert "gerundio-encadeado" in _rules_of("O agente lê o arquivo, gerando um relatório.")
+    assert "gerundio-encadeado" in _rules_of("O agente lê o ficheiro, gerando um relatório.")
     assert "gerundio-encadeado" not in _rules_of("Clique em OK, quando terminar.")
     assert "decalque-do-ingles" in _rules_of("O backend eventualmente responde.")
     assert "decalque-do-ingles" in _rules_of("A API suporta JSON.")
@@ -1456,7 +1610,7 @@ def selftest():
         assert "diretiva-invalida" in _rules_of(broken), broken
     # uma diretiva dentro de um bloco de código é só um exemplo de uso
     assert _rules_of("```markdown\n<!-- pts-lint: deve-falhar -->\nTexto.\n<!-- pts-lint: fim -->\n```") == []
-    # um sinônimo dentro de um exemplo que deve falhar não entra na rotação do documento
+    # um sinónimo dentro de um exemplo que deve falhar não entra na rotação do documento
     findings, _ = lint("Verifique o log.\n\n<!-- pts-lint: deve-falhar -->\nConfira o log; agora.\n"
                        "<!-- pts-lint: fim -->")
     assert findings == [], findings
@@ -1482,33 +1636,95 @@ def selftest():
     assert _rules_of("O deploy foi em 2026-10-07. O próximo é em 07/Out. O plano cobre 24/48 casos.") == []
     assert _rules_of("Use 1/3 da memória. O suporte é 24/7.") == []
     assert "data-ambigua" in _rules_of("O prazo é 7/10.")
-    assert "numero-ambiguo" in _rules_of("O limite é 1.000 requisições.")
+    assert "numero-ambiguo" in _rules_of("O limite é 1.000 pedidos.")
     assert [f["nivel"] for f in lint("O tempo é 1,500 s.")[0]] == [CONSULTIVA]
     assert _rules_of("O tempo é 1,5 s. Custa R$ 2,50.") == []
     assert _rules_of("Custa 1.500,00. São 1.000.000 de linhas. Veja a Lei nº 15.263/2025 e a regra 3.7. "
                      "O limite é 10 000.") == []
-    # gênero: só as formas da norma
-    for text in ("Todes os usuários.", "Bem-vindes ao sistema.", "Olá, todxs.", "Caros alun@s.", "Elu saiu."):
+    # género: só as formas da norma
+    for text in ("Todes os utilizadores.", "Bem-vindes ao sistema.", "Olá, todxs.", "Caros alun@s.", "Elu saiu."):
         assert "linguagem-neutra" in _rules_of(text), text
     assert _rules_of("Use o Linux e o fax. Escreva para nome@servidor.com. Abra a sandbox.") == []
     # "excluir", ser e estar, decalques e "se" proclítico
-    assert "palavra-ambigua" in _rules_of("Exclua os arquivos temporários do pacote.")
+    assert "palavra-ambigua" in _rules_of("Exclua os ficheiros temporários do pacote.")
     assert "ser-estar" in _rules_of("O servidor é indisponível.")
     assert "ser-estar" not in _rules_of("O servidor está indisponível. O campo é obrigatório. "
-                                        "Os campos são vazios por padrão. O recurso é ativo no plano pago.")
+                                        "Os campos são vazios por omissão. O recurso é ativo no plano pago.")
     assert "decalque-do-ingles" in _rules_of("O módulo performa bem.")
     assert "decalque-do-ingles" in _rules_of("Ele realizou que o disco estava cheio.")
     assert "passiva-sintetica" in _rules_of("Não se recomenda reiniciar.")
     assert "passiva-sintetica" not in _rules_of("Verifique se usa o cache.")
 
+    # português europeu: gerundismo com "estar a", locuções e gíria de Portugal
+    levels = {f["nivel"] for f in lint("Vamos estar a enviar o relatório.")[0] if f["regra"] == "gerundismo"}
+    assert levels == {OBRIGATORIA}, levels
+    levels = {f["nivel"] for f in lint("O backup vai estar a executar durante a janela.")[0]
+              if f["regra"] == "gerundismo"}
+    assert levels == {CONSULTIVA}, levels
+    assert "gerundismo" not in _rules_of("O processo pode estar a bloquear. O job está a executar. Vai estar a par.")
+    for text in ("Use o cache por forma a reduzir a latência.", "Mude o cache com vista a reduzir a latência.",
+                 "Isto vale no âmbito do projeto.", "Relativamente ao log, nada muda.",
+                 "Tendo em conta o limite, pare.", "Isto vale ao nível do servidor."):
+        assert "locucao-prolixa" in _rules_of(text), text
+    for text in ("Leve a cabo a análise.", "Dê resposta ao pedido.", "Faça um push da branch.",
+                 "Ponha o servidor a correr."):
+        assert "verbo-suporte" in _rules_of(text) or "giria-tecnica" in _rules_of(text), text
+    assert "giria-tecnica" in _rules_of("Faça um push da branch.")
+    assert "giria-tecnica" in _rules_of("Pôr o servidor a correr.")
+    # marcas do português do Brasil e tratamento pessoal
+    for text in ("Abra o arquivo na tela.", "A equipe lê a requisição.", "Baixe o pacote.", "Acesse o painel.",
+                 "O usuário vê o fato.", "O job está rodando.", "A senha expirou."):
+        assert "marca-do-brasil" in _rules_of(text), text
+    assert "marca-do-brasil" not in _rules_of("Abra o ficheiro no ecrã. A equipa lê o pedido. O job está a executar. "
+                                              "O utilizador descarrega o pacote e acede ao painel.")
+    assert "marca-do-brasil" not in _rules_of("O sistema está disponível. O valor está pendente. Está bem.")
+    assert all(f["nivel"] == CONSULTIVA for f in lint("A equipe usa o arquivo.")[0] if f["regra"] == "marca-do-brasil")
+    assert "tratamento-pessoal" in _rules_of("Você abre o ficheiro.")
+    assert "tratamento-pessoal" in _rules_of("Tu abres o ficheiro.")
+    assert "tratamento-pessoal" not in _rules_of("Abra o ficheiro. A ferramenta abre o ficheiro.")
+    # grupos de sinónimos de Portugal
+    findings, _ = lint("Guarde o ficheiro. Depois grave a cópia.")
+    assert any(f["regra"] == "rotacao-de-sinonimos" and f["trecho"] == "grave" for f in findings), findings
+    findings, _ = lint("Execute o job. A roda gira. O acesso falhou. Descarregue o pacote.")
+    assert not any(f["regra"] == "rotacao-de-sinonimos" for f in findings), findings
+    findings, _ = lint("Execute o job. Depois corra o teste.")
+    assert any(f["regra"] == "rotacao-de-sinonimos" and f["trecho"] == "corra" for f in findings), findings
+    # siglas: o nome por extenso na primeira ocorrência
+    findings, _ = lint("O TTL expira. O TTL conta em segundos.")
+    assert [f["regra"] for f in findings] == ["sigla"], findings
+    assert _rules_of("O tempo de vida (TTL) expira. O TTL conta em segundos.") == []
+    assert _rules_of("O TTL (tempo de vida) expira.") == []
+    assert _rules_of("A API devolve JSON por HTTP.") == []
+    # títulos: nível saltado, repetido ou longo
+    titles = [f for f in lint("# Um\n\n### Três\n\n## Dois\n\n## Dois\n")[0] if f["regra"] == "titulo"]
+    assert [f["linha"] for f in titles] == [3, 7], titles
+    assert all(f["nivel"] == CONSULTIVA for f in titles)
+    long_title = " ".join(["palavra"] * 13)
+    assert any("13 palavras" in f["mensagem"] for f in lint(f"# {long_title}\n")[0] if f["regra"] == "titulo")
+    assert _rules_of("# Um\n\n## Dois\n\n```\n#### sem título\n```\n\n## Três\n") == []
+    # parágrafos: um tópico e no máximo seis frases
+    seven = " ".join(f"Frase {n} curta." for n in range(7))
+    findings, _ = lint(seven)
+    assert [f["regra"] for f in findings] == ["paragrafo-longo"], findings
+    assert "paragrafo-longo" not in _rules_of(" ".join(f"Frase {n} curta." for n in range(6)))
+    assert "paragrafo-longo" not in _rules_of(seven, max_sentences=7)
+    # inciso entre o sujeito e o verbo, e passos em prosa
+    assert "inciso" in _rules_of("O servidor, caso o token, emitido pelo serviço de autenticação, tenha expirado, "
+                                 "rejeita o pedido.")
+    assert "inciso" in _rules_of("O job (que o agente iniciou ontem depois do último reinício do servidor) falhou.")
+    assert "inciso" not in _rules_of("O job falhou (o agente iniciou-o ontem depois do último reinício do servidor).")
+    assert "inciso" not in _rules_of("Se o token expirou, o servidor rejeita o pedido. O job (ontem) falhou.")
+    assert "passos-em-prosa" in _rules_of("Primeiro abra o ficheiro, depois leia a linha 3 e por fim feche o ficheiro.")
+    assert "passos-em-prosa" not in _rules_of("Abra o ficheiro. Depois leia a linha 3.")
+
     checked = _check_repository()
-    print("autoteste OK" + (f" (e {checked} arquivos do repositório)" if checked else ""))
+    print("autoteste OK" + (f" (e {checked} ficheiros do repositório)" if checked else ""))
 
 
 def _check_repository():
     """Quando o linter está no repositório da skill, analisa os documentos dela.
 
-    Os documentos precisam passar sem achados obrigatórios. O arquivo de casos-limite
+    Os documentos precisam passar sem achados obrigatórios. O ficheiro de casos-limite
     precisa falhar com exatamente os dois achados que o README promete.
     """
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -1521,7 +1737,7 @@ def _check_repository():
     for name in docs:
         with open(os.path.join(root, name), encoding="utf-8") as handle:
             findings, _ = lint(handle.read(), filename=name)
-        failures += [f"{f['arquivo']}:{f['linha']}:{f['coluna']} {f['regra']} [{f['trecho']}]"
+        failures += [f"{f['ficheiro']}:{f['linha']}:{f['coluna']} {f['regra']} [{f['trecho']}]"
                      for f in findings if f["nivel"] == OBRIGATORIA]
     assert not failures, "Os documentos da skill têm achados obrigatórios:\n" + "\n".join(failures)
     with open(os.path.join(root, fixture), encoding="utf-8") as handle:
@@ -1558,6 +1774,7 @@ def main(argv):
     disabled, enabled = set(), set()
     lang, parts = None, None
     max_words, max_words_strict = MAX_WORDS, MAX_WORDS_STRICT
+    max_sentences = MAX_SENTENCES
     paths = []
     known = KNOWN_RULES
     i = 0
@@ -1584,6 +1801,9 @@ def main(argv):
             elif a == "--max-palavras":
                 i += 1
                 max_words = int(argv[i])
+            elif a == "--max-frases":
+                i += 1
+                max_sentences = int(argv[i])
             elif a == "--max-palavras-estrito":
                 i += 1
                 max_words_strict = int(argv[i])
@@ -1606,7 +1826,8 @@ def main(argv):
                             f"Conhecidas: {', '.join(sorted(RUST_PARTS))}")
 
     options = dict(lang=lang, parts=parts, max_words=max_words,
-                   max_words_strict=max_words_strict, enabled=enabled, read_quotes=read_quotes)
+                   max_words_strict=max_words_strict, enabled=enabled, read_quotes=read_quotes,
+                   max_sentences=max_sentences)
     documents = ([(p, open(p, encoding="utf-8").read()) for p in paths]
                  or [("<stdin>", sys.stdin.read())])
     findings, words_total, per_file = [], 0, []

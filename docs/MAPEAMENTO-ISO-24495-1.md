@@ -61,6 +61,8 @@ A norma escreve para leitores humanos e pede uma avaliação com esses leitores.
 
 ## Resumo do trabalho novo
 
+Estado do linter: as seis regras abaixo estão implementadas como consultivas (`sigla`, `titulo`, `passos-em-prosa`, `paragrafo-longo`, `inciso`), juntamente com `marca-do-brasil`, `tratamento-pessoal` e o gerundismo "estar a" + infinitivo. Os limites são configuráveis (`--max-frases`).
+
 **Regras novas para o linter** (todas consultivas no início, para não reprovar execuções):
 1. Sigla sem expansão na primeira ocorrência.
 2. Nível de título que salta.
