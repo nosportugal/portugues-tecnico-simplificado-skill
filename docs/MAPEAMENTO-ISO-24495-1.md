@@ -1,6 +1,6 @@
 # Mapeamento da ISO 24495-1 para a skill pt-PT
 
-Estado: rascunho. Fonte de trabalho: ABNT NBR ISO 24495-1:2024 (adoção brasileira da ISO 24495-1:2023). A numeração das cláusulas é a da ISO e deve coincidir com a da NP ISO 24495-1:2024. Confirmar quando a norma portuguesa estiver disponível. Este documento parafraseia e não reproduz o texto da norma.
+Estado: rascunho. Fonte de trabalho: ABNT NBR ISO 24495-1:2024 (adoção brasileira da ISO 24495-1:2023). A numeração das cláusulas é a da ISO e deve coincidir com a da NP ISO 24495-1:2024. Verificar quando a norma portuguesa estiver disponível. Este documento parafraseia e não reproduz o texto da norma.
 
 A norma escreve para leitores humanos e pede uma avaliação com esses leitores. A skill escreve para agentes. Por isso cada diretriz recebe um destino:
 
@@ -61,7 +61,7 @@ A norma escreve para leitores humanos e pede uma avaliação com esses leitores.
 
 ## Resumo do trabalho novo
 
-Estado do linter: as seis regras abaixo estão implementadas como consultivas (`sigla`, `titulo`, `passos-em-prosa`, `paragrafo-longo`, `inciso`), juntamente com `marca-do-brasil`, `tratamento-pessoal` e o gerundismo "estar a" + infinitivo. Os limites são configuráveis (`--max-frases`).
+Estado do linter: as regras abaixo estão implementadas como consultivas (`sigla`, `titulo`, `passos-em-prosa`, `paragrafo-longo`, `inciso`), juntamente com `marca-do-brasil`, `tratamento-pessoal` e o gerundismo "estar a" + infinitivo. Os limites são configuráveis (`--max-frases`).
 
 **Regras novas para o linter** (todas consultivas no início, para não reprovar execuções):
 1. Sigla sem expansão na primeira ocorrência.
@@ -71,13 +71,13 @@ Estado do linter: as seis regras abaixo estão implementadas como consultivas (`
 5. Parágrafo com mais frases do que o máximo.
 6. Inciso entre parêntesis ou travessões a separar sujeito e verbo.
 
-**Regras novas só de leitura** (entram no `SKILL.md` e na lista de varredura): mensagem principal primeiro, informação conhecida antes da nova, uma ideia por parágrafo, informação complementar separada, tom neutro.
+**Regras novas só de leitura** entram no `SKILL.md` e na lista de varredura. São elas: mensagem principal primeiro, informação conhecida antes da nova, uma ideia por parágrafo, informação complementar separada e tom neutro.
 
-**Diferenças a documentar**: tratamento impessoal em vez de "você" (5.3.3 b), sem variação de ritmo (5.3.4 c), sem imagens (5.3.6), avaliação por teste com agente em vez de leitores (5.4.3).
+**Diferenças a documentar**: tratamento impessoal em vez de "você" (5.3.3 b) e sem variação de ritmo (5.3.4 c). Sem imagens (5.3.6). Avaliação por teste com agente em vez de leitores (5.4.3).
 
 ## Ordem sugerida
 
 1. Reescrever `SKILL.md` em pt-PT com o léxico e a gramática do plano, mais os itens de leitura acima.
 2. Adaptar o linter (listas pt-PT, regras 1 a 6).
 3. Reescrever `README.md`, `references/` e `examples/`.
-4. Quando a NP ISO 24495-1:2024 estiver disponível, confirmar a numeração e a terminologia ("linguagem clara").
+4. Quando a NP ISO 24495-1:2024 estiver disponível, verificar a numeração e a terminologia ("linguagem clara").

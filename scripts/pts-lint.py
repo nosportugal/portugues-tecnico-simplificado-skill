@@ -115,7 +115,7 @@ OBJETO_TECNICO = (r"(?:servidor(?:es)?|serviços?|containers?|contêiner(?:es)?|
 # Verbos de ação pontual: "vou estar enviando" é gerundismo, "vai estar rodando durante a
 # janela" é um futuro durativo legítimo.
 PONTUAIS = (r"(?:envi|mand|encaminh|transfer|retorn|pass|agend|providenci|cancel|confirm|verific|analis|lig|avis"
-            r"|respond|registr|atualiz|resolv|reinici|instal|liber|bloque|desbloque|cadastr|entr|abr|fech|anot"
+            r"|respond|registr|regist|libert|guard|grav|carreg|descarreg|atualiz|resolv|reinici|instal|liber|bloque|desbloque|cadastr|entr|abr|fech|anot"
             r"|repass|devolv|corrig)")
 IR_ESTAR = (r"\b(?:vou|vai|vamos|vão|ia|iam|íamos|irei|irá|iremos|irão|iria|iriam|ir)\s+estar\s+"
             r"(?:(?:te|lhe|lhes|o|a|os|as|me|nos|vos|se)\s+)?")
@@ -220,7 +220,7 @@ GIRIAS = [
      "Gíria com 'dar um'. Use o verbo da ação: enviar, juntar, reiniciar, verificar."),
     (r"bat(?:er|e|em|a|am|eu|eram|endo|ido)\s+(?:n[oa]s?|em)\s+(?:\w+\s+)?"
      r"(?:endpoints?|api|servidor(?:es)?|serviços?|banco|url|rotas?|porta)\b",
-     "'Bater em' é gíria. Use 'chamar' ou 'enviar uma pedido a'."),
+     "'Bater em' é gíria. Use 'chamar' ou 'enviar um pedido a'."),
     (FAZER + r"\s+(?:um\s+)?(?:push|pull|merge|commit|deploy|restart|reboot|refresh|reset|rollback|kill|ping|fetch"
      r"|build|upgrade)\b",
      "Gíria com 'fazer'. Use o verbo da ação: enviar, juntar, reiniciar, verificar."),
@@ -256,12 +256,13 @@ BRASILEIRISMOS = [
     (r"usuári[oa]s?", "Em Portugal, 'utilizador'."),
     (r"requisiç(?:ão|ões)", "Em Portugal, 'pedido'."),
     (r"senhas?", "Para uma credencial, use 'palavra-passe'."),
-    (r"baix(?:ar|e|em|ou|aram|ando|ado|ada|ados|adas)", "Para obter um ficheiro, use 'descarregar'. 'Baixar' é diminuir."),
-    (r"salv(?:ar|e|em|ou|aram|ando|ado|ada|ados|adas)", "Para gravar um ficheiro, use 'guardar'. 'Salvar' é resgatar."),
+    (r"baix(?:ar|am|e|em|ou|aram|ando|ado|ada|ados|adas)", "Para obter um ficheiro, use 'descarregar'. 'Baixar' é diminuir."),
+    (r"salv(?:ar|a|am|e|em|ou|aram|ando|ado|ada|ados|adas)", "Para gravar um ficheiro, use 'guardar'. 'Salvar' é resgatar."),
     (r"acess(?:ar|a|am|e|em|ou|aram|ando|ado|ada|ados|adas)", "Em Portugal, 'aceder'."),
-    (r"cadastr(?:ar|e|em|ou|aram|ando|ado|ada|ados|adas|o|os)", "Em Portugal, 'registar' ou 'inscrever'."),
+    (r"registr(?:ar|e|em|ou|aram|ando|ado|ada|ados|adas|o|os)", "Em Portugal, 'registar' e 'registo'."),
+    (r"cadastr(?:ar|a|am|e|em|ou|aram|ando|ado|ada|ados|adas|o|os)", "Em Portugal, 'registar' ou 'inscrever'."),
     (r"gerenci(?:ar|a|am|e|em|ou|aram|ando|ado|ada|ados|adas|amento)", "Em Portugal, 'gerir' ou 'gestão'."),
-    (r"rod(?:ar|am|em|ou|aram|ando|ado|ada|ados|adas)",
+    (r"rod(?:ar|am|e|em|ou|aram|ando|ado|ada|ados|adas)",
      "'Rodar' é do Brasil. Use 'executar' ('correr' também quer dizer fluir)."),
     (r"mouses?", "Em Portugal, 'rato'."),
     (r"celulares?", "Em Portugal, 'telemóvel'."),
@@ -483,7 +484,7 @@ EXCLUDED_FORMS = {
     "parar": {"para", "paras", "parado", "parada", "parados", "paradas"},
     "salvar": {"salvo"},
     "guardar": {"guarda", "guardas"},
-    "correr": {"corro", "corre", "corres", "corrida", "corridas"},
+    "correr": {"corro", "corrida", "corridas"},
     "rodar": {"roda", "rodas", "rodo"},
     "baixar": {"baixo", "baixa", "baixas"},
     "acessar": {"acesso"},
@@ -499,7 +500,8 @@ MIN_PARENTHETICAL_WORDS = 6
 PARENTHETICAL = re.compile(r"\([^()\n]+\)(?=\s+[a-zà-ú])")  # só se a frase continua depois
 MAX_HEADING_WORDS = 12  # palavras por título (ISO 24495-1, 5.2.4: títulos curtos)
 # Siglas que o leitor técnico conhece. Qualquer outra pede o nome por extenso na primeira ocorrência.
-ACRONYM = re.compile(r"(?<![\w-])[A-ZÀ-Ý]{2,6}(?![\w-])")
+ACRONYM = re.compile(r"(?<!\w)[A-ZÀ-Ý]{2,6}(?!\w)")
+ROMAN_NUMERAL = re.compile(r"X{0,3}(?:IX|IV|V?I{0,3})")
 COMMON_ACRONYMS = set("""API URL URI HTTP HTTPS JSON XML YAML HTML CSS SQL CPU GPU RAM SSH TLS SSL UTF PDF ID IP DNS
 TCP UDP CLI GUI UI UX SDK IDE OK ISO SI IA UE EUA NP USB LED PIN GPS SMS UTC CSV TOML REST UUID ASCII""".split())
 HEADING_LEVEL = re.compile(r"^ {0,3}(#{1,6})(?:\s+(.*?))?\s*#*\s*$")
@@ -1140,7 +1142,7 @@ def _rust_blocks(src, parts):
     return blocks
 
 
-def _heading_findings(lines, filename):
+def _heading_findings(lines, filename, skip=lambda lineno: False):
     """Títulos que saltam de nível, que se repetem ou que são longos demais (ISO 24495-1, 5.2.4)."""
     findings, seen, previous, fence = [], {}, 0, False
     for lineno, col0, raw in lines:
@@ -1151,7 +1153,7 @@ def _heading_findings(lines, filename):
         if fence:
             continue
         m = HEADING_LEVEL.match(raw)
-        if not m:
+        if not m or skip(lineno):
             continue
         level, text = len(m.group(1)), (m.group(2) or "").strip()
         words = len([token for token in text.split() if WORD.search(token)])
@@ -1233,12 +1235,15 @@ def lint(text, filename="<stdin>", lang=None, parts=None, max_words=MAX_WORDS,
             for m in ACRONYM.finditer(masked):
                 name = m.group(0)
                 spot = at(m.start())
-                if name in seen_acronyms or region_of(spot[0]):
+                if name in seen_acronyms or region_of(spot[0]) or ROMAN_NUMERAL.fullmatch(name):
                     continue
                 seen_acronyms.add(name)
+                # "ASD-STE100", "CT-221": uma sigla ligada por hífen faz parte de um nome composto.
+                if masked[m.start() - 1:m.start()] == "-" or masked[m.end():m.end() + 1] == "-":
+                    continue
                 before, after = masked[:m.start()].rstrip(), masked[m.end():].lstrip()
-                if (name in COMMON_ACRONYMS or before.endswith("(") or after.startswith(")")
-                        or after.startswith("(")):
+                defined = (re.search(r"\((?:ou\s+)?$", before) and after.startswith(")")) or after.startswith("(")
+                if name in COMMON_ACRONYMS or defined:
                     continue
                 finding(*spot, "sigla", CONSULTIVA, name,
                         f"A sigla {name} aparece sem o nome por extenso. Escreva o nome na primeira "
@@ -1253,6 +1258,8 @@ def lint(text, filename="<stdin>", lang=None, parts=None, max_words=MAX_WORDS,
                             seen_synonyms[(gi, verb)] = spot
             # Um parêntesis longo a meio da frase corta a ideia principal (ISO 24495-1, 5.3.3 a).
             for m in PARENTHETICAL.finditer(masked):
+                if re.search(r"[A-ZÀ-Ý]{2,6}\s*$", masked[:m.start()]):
+                    continue  # o parêntesis expande a sigla, não interrompe a frase
                 if len([token for token in m.group(0).split() if WORD.search(token)]) >= MIN_PARENTHETICAL_WORDS:
                     finding(*at(m.start()), "inciso", CONSULTIVA, raw[m.start():m.end()].strip(),
                             f"Um parêntesis com {MIN_PARENTHETICAL_WORDS} palavras ou mais, a meio da frase, corta "
@@ -1276,7 +1283,7 @@ def lint(text, filename="<stdin>", lang=None, parts=None, max_words=MAX_WORDS,
                         f"O parágrafo tem {sentences} frases (limite {max_sentences}). Um parágrafo trata de um "
                         f"só tópico. Divida-o.")
         if kind == "markdown":
-            findings.extend(_heading_findings(block["lines"], filename))
+            findings.extend(_heading_findings(block["lines"], filename, lambda lineno: bool(region_of(lineno))))
         # Blocos de rustdoc e de string são pequenos documentos Markdown.
         virtual = "\n".join(content for _, _, content in block["lines"])
         for f in _dangling_conjunction_findings(virtual, filename):
@@ -1355,7 +1362,7 @@ def selftest():
                      "voz-passiva", "gerundismo", "tempo-composto"):
         assert expected in rules, expected
     # ressalvas nunca são marcadas, inclusive modal + infinitivo composto
-    findings, _ = lint("A pedido pode ter falhado. Pode ser um timeout. O disco talvez tenha enchido. "
+    findings, _ = lint("O pedido pode ter falhado. Pode ser um timeout. O disco talvez tenha enchido. "
                        "O servidor deve ter travado. O processo pode estar travando. O job teria falhado.")
     assert findings == [], findings
     # blocos de código ficam de fora
@@ -1718,6 +1725,21 @@ def selftest():
     assert "passos-em-prosa" in _rules_of("Primeiro abra o ficheiro, depois leia a linha 3 e por fim feche o ficheiro.")
     assert "passos-em-prosa" not in _rules_of("Abra o ficheiro. Depois leia a linha 3.")
 
+    # revisão: radicais de Portugal no gerundismo, formas do Brasil, siglas e títulos
+    for text in ("Vamos estar a registar o evento.", "Vou estar a guardar o ficheiro.", "Vamos estar a libertar a porta."):
+        assert {f["nivel"] for f in lint(text)[0] if f["regra"] == "gerundismo"} == {OBRIGATORIA}, text
+    for text in ("O job baixam o pacote.", "Rode o script.", "A tarefa salva o ficheiro.", "O registro falhou.",
+                 "A equipa cadastra o utilizador."):
+        assert "marca-do-brasil" in _rules_of(text), text
+    findings, _ = lint("Execute o job. O job corre à noite.")
+    assert any(f["regra"] == "rotacao-de-sinonimos" for f in findings), findings
+    assert "sigla" not in _rules_of("A norma ASD-STE100 existe. O ASD mantém a norma.")
+    assert "sigla" not in _rules_of("Veja a Parte II e a Parte IV.")
+    assert "sigla" in _rules_of("A sigla (por exemplo, TTL) aparece. O TTL conta.")
+    assert "inciso" not in _rules_of("A ASD (AeroSpace and Defence Industries Association of Europe) mantém a norma.")
+    findings, _ = lint("# Um\n\n<!-- pts-lint: deve-falhar titulo -->\n#### Salto; mau\n<!-- pts-lint: fim -->\n\n## Dois\n")
+    assert not any(f["regra"] == "titulo" for f in findings), findings
+
     checked = _check_repository()
     print("autoteste OK" + (f" (e {checked} ficheiros do repositório)" if checked else ""))
 
@@ -1729,7 +1751,8 @@ def _check_repository():
     precisa falhar com exatamente os dois achados que o README promete.
     """
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    docs = ["SKILL.md", "README.md", "references/regras-de-redacao.md", "examples/antes-depois.md"]
+    docs = ["SKILL.md", "README.md", "references/regras-de-redacao.md", "examples/antes-depois.md",
+            "docs/MAPEAMENTO-ISO-24495-1.md", "docs/PLANO-PT-PT.md"]
     fixture = "examples/casos-limite-do-linter.md"
     paths = [os.path.join(root, name) for name in docs + [fixture]]
     if not all(os.path.exists(path) for path in paths):

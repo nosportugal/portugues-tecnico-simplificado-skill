@@ -14,13 +14,18 @@ A ISO 24495-1:2023 (linguagem simples) define quatro princípios: o texto é rel
 - As regras mecânicas continuam a vir do STE (voz ativa, uma instrução por frase, sem ponto e vírgula, etc.).
 - A NP ISO 24495-1:2024 existe: "Linguagem clara - Parte 1: Princípios de base e orientações", em português (Portugal), CT 221 do IPQ, publicada em 2024-06-14, 21 páginas, 21,00 EUR sem IVA (https://www.ipq.pt/loja/normas/norma/1335f156-072b-ef11-840a-6045bddfaf5e/). A página não diz que é uma adoção da ISO 24495-1, mas o número coincide.
 - Até comprarmos a NP, o texto de trabalho é a ABNT NBR ISO 24495-1:2024 (adoção brasileira da mesma norma ISO). Não citar cláusulas de memória. As duas normas têm direitos reservados: parafrasear, nunca copiar.
-- A ISO 24495-1 é uma norma internacional sobre princípios, não sobre uma variante da língua. As adoções nacionais (ABNT, UNE) traduzem o mesmo conteúdo. Não existe norma de linguagem só para o português europeu que eu tenha confirmado.
+- A ISO 24495-1 é uma norma internacional sobre princípios, não sobre uma variante da língua. As adoções nacionais (ABNT, UNE) traduzem o mesmo conteúdo. Não existe norma de linguagem só para o português europeu que eu tenha verificado.
 
 ## Estado
 
 Feito: `SKILL.md`, linter (vocabulário, gerundismo "estar a", `marca-do-brasil`, `tratamento-pessoal`, `sigla`, `titulo`, `paragrafo-longo`, `inciso`, `passos-em-prosa`), `README.md`, `references/` e `examples/`.
 
-Por fazer: ler a NP ISO 24495-1:2024 e confirmar a numeração e a terminologia, medir o tamanho do português europeu para os limites de palavras, detetar a colocação do pronome no linter, rever o ficheiro `LICENSE` e decidir o nome final da skill.
+Por fazer:
+
+- Ler a NP ISO 24495-1:2024 e verificar a numeração e a terminologia.
+- Medir o tamanho do português europeu para os limites de palavras.
+- Detetar a colocação do pronome no linter.
+- Testar o `npx skills add` a partir do GitHub, depois da fusão.
 
 ## Trabalho a fazer (plano original)
 
