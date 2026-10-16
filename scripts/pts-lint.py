@@ -258,7 +258,7 @@ BRASILEIRISMOS = [
     (r"senhas?", "Para uma credencial, use 'palavra-passe'."),
     (r"baix(?:ar|e|em|ou|aram|ando|ado|ada|ados|adas)", "Para obter um ficheiro, use 'descarregar'. 'Baixar' é diminuir."),
     (r"salv(?:ar|e|em|ou|aram|ando|ado|ada|ados|adas)", "Para gravar um ficheiro, use 'guardar'. 'Salvar' é resgatar."),
-    (r"acess(?:ar|e|em|ou|aram|ando|ado|ada|ados|adas)", "Em Portugal, 'aceder'."),
+    (r"acess(?:ar|a|am|e|em|ou|aram|ando|ado|ada|ados|adas)", "Em Portugal, 'aceder'."),
     (r"cadastr(?:ar|e|em|ou|aram|ando|ado|ada|ados|adas|o|os)", "Em Portugal, 'registar' ou 'inscrever'."),
     (r"gerenci(?:ar|a|am|e|em|ou|aram|ando|ado|ada|ados|adas|amento)", "Em Portugal, 'gerir' ou 'gestão'."),
     (r"rod(?:ar|am|em|ou|aram|ando|ado|ada|ados|adas)",
