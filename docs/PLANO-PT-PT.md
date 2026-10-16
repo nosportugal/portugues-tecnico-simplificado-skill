@@ -4,15 +4,16 @@ Estado: rascunho inicial. Base: fork de `swfsql/portugues-tecnico-simplificado-s
 
 ## Objetivo
 
-Uma skill equivalente para o português europeu, com regras de redação para textos lidos por agentes de IA. Usa a NP ISO 24495-1:2024 como uma das bases, ao lado do ASD-STE100.
+Uma skill só para o português europeu, com regras de redação para textos lidos por agentes de IA. Este repositório contém só a versão pt-PT. A versão pt-BR fica no upstream e não é mantida aqui. Não há contribuições de volta ao upstream.
 
 ## Papel da NP ISO 24495-1:2024
 
-A norma (adoção portuguesa da ISO 24495-1:2023, linguagem simples) define quatro princípios: o texto é relevante, fácil de encontrar, fácil de compreender e fácil de usar. Escreve para pessoas. Esta skill escreve para agentes. Por isso:
+A ISO 24495-1:2023 (linguagem simples) define quatro princípios: o texto é relevante, fácil de encontrar, fácil de compreender e fácil de usar. Escreve para pessoas. Esta skill escreve para agentes. Por isso:
 
 - Os princípios entram como critérios de revisão (relevância, estrutura e ordem, clareza, utilização).
 - As regras mecânicas continuam a vir do STE (voz ativa, uma instrução por frase, sem ponto e vírgula, etc.).
-- É preciso ler o texto da norma (pago, via IPQ/ISO) antes de citar cláusulas. Não citar de memória.
+- A existência da "NP ISO 24495-1:2024" ainda não está confirmada (ver abaixo). O texto de trabalho é, por agora, a ABNT NBR ISO 24495-1:2024, que é a adoção brasileira da mesma norma ISO. Não citar cláusulas de memória.
+- A ISO 24495-1 é uma norma internacional sobre princípios, não sobre uma variante da língua. As adoções nacionais (ABNT, UNE) traduzem o mesmo conteúdo. Não existe norma de linguagem só para o português europeu que eu tenha confirmado.
 
 ## Trabalho a fazer
 
@@ -24,9 +25,13 @@ A norma (adoção portuguesa da ISO 24495-1:2023, linguagem simples) define quat
 6. **Novas regras vindas da ISO 24495-1**: título e resumo informativos, informação mais importante primeiro, termos consistentes, listas e tabelas quando ajudam. Decidir quais são verificáveis pelo linter e quais ficam como leitura.
 7. **Nome e distribuição**: nome da skill (por exemplo `portugues-tecnico-simplificado-pt`), e como convive com a versão pt-BR (branch, diretório ou repositório separado).
 
-## Decisões em aberto
+## Decisões tomadas
 
-- Branch `pt-pt` neste fork, ou diretório/skill separada que mantém as duas variantes no mesmo repositório?
-- Registo: "tu", "você" ou impessoal nas instruções?
-- O fork deve contribuir de volta para o upstream (a licença é MIT)?
-- Quem tem acesso ao texto da NP ISO 24495-1:2024?
+- Este repositório contém só a versão pt-PT. A pt-BR fica no upstream.
+- Tratamento impessoal nas instruções.
+- Sem contribuição de volta ao upstream. Edição separada, focada em pt-PT.
+
+## Em aberto
+
+- Confirmar no catálogo do IPQ se a NP ISO 24495-1:2024 existe.
+- Nome da skill (por exemplo `portugues-tecnico-simplificado-pt`).
