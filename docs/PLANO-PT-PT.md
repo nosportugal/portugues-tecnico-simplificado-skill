@@ -12,7 +12,8 @@ A ISO 24495-1:2023 (linguagem simples) define quatro princípios: o texto é rel
 
 - Os princípios entram como critérios de revisão (relevância, estrutura e ordem, clareza, utilização).
 - As regras mecânicas continuam a vir do STE (voz ativa, uma instrução por frase, sem ponto e vírgula, etc.).
-- A existência da "NP ISO 24495-1:2024" ainda não está confirmada (ver abaixo). O texto de trabalho é, por agora, a ABNT NBR ISO 24495-1:2024, que é a adoção brasileira da mesma norma ISO. Não citar cláusulas de memória.
+- A NP ISO 24495-1:2024 existe: "Linguagem clara - Parte 1: Princípios de base e orientações", em português (Portugal), CT 221 do IPQ, publicada em 2024-06-14, 21 páginas, 21,00 EUR sem IVA (https://www.ipq.pt/loja/normas/norma/1335f156-072b-ef11-840a-6045bddfaf5e/). A página não diz que é uma adoção da ISO 24495-1, mas o número coincide.
+- Até comprarmos a NP, o texto de trabalho é a ABNT NBR ISO 24495-1:2024 (adoção brasileira da mesma norma ISO). Não citar cláusulas de memória. As duas normas têm direitos reservados: parafrasear, nunca copiar.
 - A ISO 24495-1 é uma norma internacional sobre princípios, não sobre uma variante da língua. As adoções nacionais (ABNT, UNE) traduzem o mesmo conteúdo. Não existe norma de linguagem só para o português europeu que eu tenha confirmado.
 
 ## Trabalho a fazer
@@ -33,5 +34,5 @@ A ISO 24495-1:2023 (linguagem simples) define quatro princípios: o texto é rel
 
 ## Em aberto
 
-- Confirmar no catálogo do IPQ se a NP ISO 24495-1:2024 existe.
+- Comprar a NP ISO 24495-1:2024 (alguém da NOS) e comparar a terminologia com a ABNT.
 - Nome da skill (por exemplo `portugues-tecnico-simplificado-pt`).
