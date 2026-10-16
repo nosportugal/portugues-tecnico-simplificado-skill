@@ -148,7 +148,7 @@ LOCUCOES = [
     (r"sendo que", "'Sendo que' encadeia ideias sem dizer a relação entre elas. Divida em duas frases "
                    "ou use o conector exato (porque, mas, e)."),
     (r"favor\s+\w+(?:ar|er|ir)", "Use o imperativo ('Verifique'), não 'Favor verificar'."),
-    (r"(?:vale|é importante|cabe) (?:ressaltar|destacar|lembrar|mencionar|notar|observar|salientar) que",
+    (r"(?:vale|é importante|cabe|importa) (?:ressaltar|destacar|lembrar|mencionar|notar|observar|salientar) que",
      "Expressão de preenchimento. Afirme o facto direto."),
 ]
 
@@ -1486,6 +1486,7 @@ def selftest():
     rules = _rules_of("O job falhou, sendo que o log está vazio.")
     assert "locucao-prolixa" in rules and "gerundio-encadeado" not in rules, rules
     assert "locucao-prolixa" in _rules_of("Favor verificar o log.")
+    assert "locucao-prolixa" in _rules_of("Importa salientar que o job falhou.")
     assert "locucao-prolixa" in _rules_of("O servidor encontra-se indisponível.")
     assert "verbo-suporte" in _rules_of("Proceda à remoção do ficheiro.")
     assert "verbo-suporte" in _rules_of("Faça uso do cache.")

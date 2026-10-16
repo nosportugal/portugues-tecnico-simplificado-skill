@@ -16,7 +16,13 @@ A ISO 24495-1:2023 (linguagem simples) define quatro princípios: o texto é rel
 - Até comprarmos a NP, o texto de trabalho é a ABNT NBR ISO 24495-1:2024 (adoção brasileira da mesma norma ISO). Não citar cláusulas de memória. As duas normas têm direitos reservados: parafrasear, nunca copiar.
 - A ISO 24495-1 é uma norma internacional sobre princípios, não sobre uma variante da língua. As adoções nacionais (ABNT, UNE) traduzem o mesmo conteúdo. Não existe norma de linguagem só para o português europeu que eu tenha confirmado.
 
-## Trabalho a fazer
+## Estado
+
+Feito: `SKILL.md`, linter (vocabulário, gerundismo "estar a", `marca-do-brasil`, `tratamento-pessoal`, `sigla`, `titulo`, `paragrafo-longo`, `inciso`, `passos-em-prosa`), `README.md`, `references/` e `examples/`.
+
+Por fazer: ler a NP ISO 24495-1:2024 e confirmar a numeração e a terminologia, medir o tamanho do português europeu para os limites de palavras, detetar a colocação do pronome no linter, rever o ficheiro `LICENSE` e decidir o nome final da skill.
+
+## Trabalho a fazer (plano original)
 
 1. **Texto da skill** (`SKILL.md`, `README.md`, `references/`, `examples/`): reescrever em pt-PT, com o Acordo Ortográfico de 1990 aplicado como em Portugal, e Priberam/Ciberdúvidas como referência. Trocar "você" por tratamento por "tu"/forma impessoal conforme o registo definido (decidir).
 2. **Léxico**: "arquivo" para "ficheiro", "tela" para "ecrã", "equipe" para "equipa", "apagar/excluir", "rodar/executar", "baixar" para "descarregar", "mouse" para "rato", "celular" para "telemóvel", "time" para "equipa". Rever os verbos-suporte, as locuções e os decalques do inglês próprios de Portugal.
