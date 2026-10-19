@@ -41,7 +41,7 @@ A norma escreve para leitores humanos e pede uma avaliação com esses leitores.
 | 5.3.3 a) 1, 2 | Estruturas de frase familiares, sem dupla leitura. | Já coberta (ordem direta, sujeito oculto, "seu" ambíguo). |
 | 5.3.3 a) 3 | Não interromper a ideia principal com incisos. | Já coberta em parte (travessão consultivo). Nova, linter: parêntesis ou travessões a meio da frase, entre o sujeito e o verbo. |
 | 5.3.3 a) 4 | Começar a frase pelo que é conhecido e acabar no que é novo. | Nova, leitura. |
-| 5.3.3 b) | Dirigir-se diretamente ao leitor ("tu", "você"). | Não aplicar. A decisão do projeto é o tratamento impessoal, e a própria norma usa o impessoal. Manter o imperativo sem sujeito ("Abra o ficheiro"). Documentar a diferença. |
+| 5.3.3 b) | Dirigir-se diretamente ao leitor ("tu", "você"). | Não aplicar. A decisão do projeto é o tratamento impessoal, e a própria norma usa o impessoal. Manter o imperativo sem sujeito ("Abra o ficheiro"). Documentar a diferença. Numa mensagem dirigida a uma pessoa, a skill mantém o tratamento do autor. |
 | 5.3.3 c) | Voz ativa. | Já coberta. |
 | 5.3.3 d), e) | Gramática, ortografia e pontuação que o leitor aceita. Seguir as normas linguísticas oficiais. | Já coberta. Passa a referir o Acordo Ortográfico de 1990 em Portugal e o Priberam. |
 | 5.3.4 a), b) | Uma ideia por frase. Sem palavras redundantes, modificadores vagos nem clichés. | Já coberta (uma instrução por frase, locuções prolixas, adjetivos de marketing). |
@@ -55,7 +55,7 @@ A norma escreve para leitores humanos e pede uma avaliação com esses leitores.
 
 | Cláusula | Ideia | Destino |
 |---|---|---|
-| 5.4.2 | Avaliar durante a redação, com a lista de verificação do Anexo B. | Já coberta (lista de varredura e linter). Atualizar a lista de varredura com os itens novos. |
+| 5.4.2 | Avaliar durante a redação, com a lista de verificação do Anexo B. | Já coberta (lista de verificação do `SKILL.md` e linter). Atualizar essa lista com os itens novos. |
 | 5.4.3 | Avaliar com leitores reais. | Adaptar. Para agentes, a avaliação é um teste: o agente destino executa a tarefa a partir do texto reescrito. Propor um pequeno conjunto de casos de teste por tipo de documento. |
 | 5.4.4 | Reavaliar ao longo do tempo. | Adaptar. Voltar a verificar o texto quando o comportamento da ferramenta mudar. |
 
@@ -71,7 +71,7 @@ Estado do linter: as regras abaixo estão implementadas como consultivas (`sigla
 5. Parágrafo com mais frases do que o máximo.
 6. Inciso entre parêntesis ou travessões a separar sujeito e verbo.
 
-**Regras novas só de leitura** entram no `SKILL.md` e na lista de varredura. São elas: mensagem principal primeiro, informação conhecida antes da nova, uma ideia por parágrafo, informação complementar separada e tom neutro.
+**Regras novas só de leitura** entram no `SKILL.md` e na lista de verificação. São elas: mensagem principal primeiro, informação conhecida antes da nova, uma ideia por parágrafo, informação complementar separada e tom neutro.
 
 **Diferenças a documentar**: tratamento impessoal em vez de "você" (5.3.3 b) e sem variação de ritmo (5.3.4 c). Sem imagens (5.3.6). Avaliação por teste com agente em vez de leitores (5.4.3).
 

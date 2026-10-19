@@ -14,7 +14,7 @@ Um agente que interpreta a saída de outro agente está numa posição muito par
 
 ## Porque uma versão em português europeu
 
-Não existe norma de linguagem controlada para o português. O STE é só para o inglês, e uma tradução direta das regras não funciona. O português não tem a partícula dos phrasal verbs ("take off"). Mas tem locuções verbais cujo sentido não vem das partes ("deixar de", "acabar com") e uma gíria técnica com o mesmo problema ("subir o servidor", "fazer um push"). O pretérito perfeito composto ("tem falhado") tem outro sentido do que o present perfect do inglês. O português separa também a essência ("ser") do estado ("estar"), e o inglês não separa.
+Não existe norma de linguagem controlada para o português. O STE é só para o inglês, e uma tradução direta das regras não funciona. O português não tem a partícula dos phrasal verbs ("take off"). Mas tem locuções verbais cujo sentido não vem das partes ("deixar de", "acabar com") e uma gíria técnica com o mesmo problema ("subir o servidor", "dar um push"). O pretérito perfeito composto ("tem falhado") tem outro sentido do que o present perfect do inglês. O português separa também a essência ("ser") do estado ("estar"), e o inglês não separa.
 
 O português tem ainda fontes de ambiguidade que o inglês não tem. Exemplos: o "dever" (ordem ou estimativa?), o "seu" com dois donos possíveis, o sujeito oculto e o "excluir" (apagar ou deixar de fora?). Os números e as datas também mudam de leitura entre as duas línguas: "1.000" e "07/10".
 
@@ -23,17 +23,17 @@ O português europeu tem ainda os seus problemas próprios:
 - **Vocabulário.** "Ficheiro", "ecrã", "equipa", "utilizador", "pedido", "descarregar". Os modelos de linguagem escrevem muitas vezes com o vocabulário do Brasil, e o leitor em Portugal nota.
 - **Palavras com vários sentidos técnicos.** "Carregar" (enviar, ler para a memória ou premir), "ligação" (hiperligação ou ligação de rede) e "correr" (executar ou fluir).
 - **Gerúndio e pronomes.** Em Portugal, "está a executar" substitui "está executando", e o pronome vai depois do verbo ("envia-o"). O gerundismo toma a forma "vamos estar a enviar".
-- **Tratamento.** O português europeu tem "tu", "você" e formas impessoais. A skill usa o imperativo sem pronome ("Abra o ficheiro") e a terceira pessoa nas descrições.
+- **Tratamento.** O português europeu tem "tu", "você" e formas impessoais. A skill usa o imperativo sem pronome ("Abra o ficheiro") e a terceira pessoa nas descrições. Numa mensagem dirigida a uma pessoa, como um comentário num pull request, mantém o tratamento do autor.
 
 Há também o traduzês. Os modelos de linguagem aprendem sobretudo com texto em inglês. O português que escrevem traz decalques: "eventualmente" no sentido de "por fim", "endereçar o problema", "suportar o formato". Outros sinais do traduzês são o gerundismo e "o mesmo" no lugar de pronome. Esta skill trata estes casos como regras próprias.
 
 ## A ISO 24495-1
 
-A ISO 24495-1:2023 fixa quatro princípios de linguagem clara: o texto é relevante, localizável, compreensível e utilizável. Portugal adotou a norma como NP ISO 24495-1:2024 ("Linguagem clara. Parte 1: Princípios de base e orientações"). A norma escreve para pessoas e a skill escreve para agentes. Por isso a skill adota algumas diretrizes, adapta outras e deixa de fora as que servem só a leitores humanos.
+A ISO 24495-1:2023 fixa quatro princípios de linguagem clara: o texto é relevante, localizável, compreensível e utilizável. Em Portugal existe a NP ISO 24495-1:2024 ("Linguagem clara. Parte 1: Princípios de base e orientações"), com o mesmo número. A página do Instituto Português da Qualidade (IPQ) não diz que a NP adota a ISO. A norma escreve para pessoas e a skill escreve para agentes. Por isso a skill adota algumas diretrizes, adapta outras e deixa de fora as que servem só a leitores humanos.
 
 - **Adota:** a mensagem principal primeiro, os títulos descritivos, as listas numeradas para passos, um tópico por parágrafo, as siglas por extenso e a informação complementar à parte.
 - **Adapta:** o "conhecer o leitor" (a skill fixa quem lê, o objetivo e o contexto) e a avaliação (um agente executa a tarefa a partir do texto).
-- **Não aplica:** o tratamento direto ao leitor, a variação do ritmo das frases e as imagens.
+- **Não aplica:** o tratamento direto ao leitor, a variação do ritmo das frases e as imagens. Numa mensagem dirigida a uma pessoa, a skill mantém o tratamento do autor.
 
 O ficheiro [`docs/MAPEAMENTO-ISO-24495-1.md`](docs/MAPEAMENTO-ISO-24495-1.md) lista o destino de cada diretriz. A skill não reproduz o texto da norma. Os números das cláusulas seguem a ISO e foram verificados na adoção brasileira da norma. Falta verificá-los na NP.
 
@@ -52,7 +52,7 @@ Há mais exemplos em [`examples/antes-depois.md`](examples/antes-depois.md), inc
 2. Escolhe um modo. O modo **Estrito** cobre procedimentos, mensagens de erro e descrições de ferramentas. O modo **Flexível** cobre READMEs, descrições de pull request e prosa explicativa. O modo Flexível mantém a disciplina da frase, mas não o vocabulário fixo.
 3. Lê o texto de entrada pelo sentido.
 4. Marca cada violação, frase a frase. Exemplos: escolha ambígua de palavras, tempo composto, voz passiva com quem age indefinido, várias instruções numa frase, cadeias de "de", palavras omitidas e frases longas. Outros: verbo-suporte, gíria técnica, locuções verbais e prolixas, ponto e vírgula, ressalvas empilhadas, adjetivos de marketing, gerundismo, decalques do inglês e marcas do português do Brasil. Por fim: "ser" no lugar de "estar", números e datas ambíguos, colocação do pronome e formas de género fora da norma.
-5. Reescreve cada frase marcada, sem perder nenhum facto, condição ou limite de escopo do original. Se uma forma mais curta perdesse uma precisão necessária, a skill mantém a forma longa e sinaliza a troca. Ela não simplifica em silêncio.
+5. Reescreve cada frase marcada, sem perder nenhum facto, condição ou limite de âmbito do original. Se uma forma mais curta perdesse uma precisão necessária, a skill mantém a forma longa e sinaliza a troca. Ela não simplifica em silêncio.
 6. Entrega só o texto reescrito: sem preâmbulo, sem anúncio de modo, sem resumo das mudanças. Quando deixa algo sem simplificar de propósito, acrescenta uma linha `Mantido como está:`.
 
 Peça o raciocínio ("mostre o diff", "quais regras quebrou") e a skill entrega uma tabela de antes e depois que nomeia cada regra.
@@ -66,17 +66,20 @@ As regras estruturais que a skill verifica são mecânicas: aponta-se a palavra 
 O linter verifica:
 
 - **Achados obrigatórios** reprovam a execução. São eles: ponto e vírgula, frase longa, locução prolixa, verbo-suporte, gíria técnica e adjetivo de marketing. Também: gerundismo com verbo de ação pontual (inclui "vou estar a enviar"), data no formato dia/mês/ano, número com ponto de milhar e forma de género fora da norma. Por fim: a rotação de sinónimos (com as conjugações dos verbos) e a conjunção pendente no fim de item de lista.
-- **Achados consultivos** nunca reprovam a execução. São eles: voz passiva, partícula "se", tempo composto, cadeia de "de", "o mesmo" como pronome, gerúndio depois de vírgula, decalque do inglês e travessão. Também: locução verbal idiomática, "excluir", "ser" no lugar de "estar", outros casos de gerundismo e data sem o ano. Por fim: número com três casas depois da vírgula.
+- **Achados consultivos** nunca reprovam a execução. São eles: voz passiva, partícula "se", tempo composto, cadeia de "de", "o mesmo" como pronome, gerúndio depois de vírgula, decalque do inglês e travessão. Também: locução verbal idiomática, "fazer um push", "fazer um restart" e outros empréstimos com verbo português exato, e palavras de dois sentidos ("excluir", "ao invés de", "ser preciso"). Ainda: "ser" no lugar de "estar", outros casos de gerundismo e data sem o ano. Por fim: número com três casas depois da vírgula e "bilhão".
 - **Achados consultivos do português europeu e da ISO 24495-1**:
-  - `marca-do-brasil`: vocabulário do Brasil ("arquivo", "tela", "usuário", "baixar") e gerúndio de ação em curso ("está rodando").
-  - `tratamento-pessoal`: "você" e "tu".
+  - `marca-do-brasil`: vocabulário do Brasil ("arquivo", "tela", "usuário", "baixar", "compartilhar"), acentos do Brasil ("eletrônico", "gênero"), "você" e gerúndio de ação em curso ("está rodando", "está sendo executado").
+  - `tratamento-pessoal`: "tu".
+  - `colocacao-do-pronome`: pronome no início da frase ("Me envie") e ênclise depois de "não", "nunca", "já", "também", "que", "quando" e "onde" ("não envia-o").
+  - `verbo-deformado`: estrangeirismo conjugado como verbo português ("deployou", "por commitar", "forkado").
+  - `contraste-com-negacao`: "não é X, é Y", "X, não Y" e "não só X, mas Y".
   - `sigla`: sigla sem o nome por extenso na primeira ocorrência (há uma lista de siglas comuns).
   - `titulo`: título que salta de nível, repetido ou com mais de 12 palavras.
   - `paragrafo-longo`: parágrafo com mais de 6 frases.
   - `inciso`: inciso entre o sujeito e o verbo, ou parêntesis longo a meio da frase.
   - `passos-em-prosa`: "primeiro... depois... por fim..." em prosa corrida.
 
-O linter nunca marca ressalvas nem modalidade. "Pode ter falhado", "talvez tenha falhado" e "teria falhado" passam limpos, e o autoteste comprova isso. O linter também não verifica a ordem direta, o sujeito oculto, o "seu" ambíguo, o "dever" ambíguo, a colocação do pronome nem a mistura de tratamentos. Essas regras precisam de leitura humana ou de um modelo.
+O linter nunca marca ressalvas nem modalidade. "Pode ter falhado", "talvez tenha falhado" e "teria falhado" passam limpos, e o autoteste comprova isso. O linter também não verifica a ordem direta, o sujeito oculto, o "seu" ambíguo, o "dever" ambíguo nem a mistura de tratamentos. Da colocação do pronome, verifica só os dois casos acima. Essas regras precisam de leitura humana ou de um modelo.
 
 O linter lê Markdown por parágrafo. Uma frase quebrada em várias linhas conta como uma frase, e o achado aponta para a primeira palavra dela. O linter ignora blocos de código, blocos de fórmula `$$`, comentários HTML, definições de ligação e front matter YAML. Código e fórmulas inline contam como uma palavra cada, e os destinos de ligação não contam. As colunas ficam exatas.
 

@@ -12,7 +12,7 @@ Estes exemplos ilustram regras reais do ASD-STE100, a partir de fontes secundár
 | Só tempos simples | "Temos recebido o relatório técnico da matriz." | "Recebemos o relatório técnico da matriz." | Em português, "temos recebido" indica repetição ("recebemos várias vezes"). Com um relatório só, a frase é um decalque do present perfect, e o pretérito perfeito diz o facto. |
 | Verbo, não substantivo | "Efetue uma inspeção do filtro." | "Inspecione o filtro." | O substantivo esconde a ação e acrescenta um verbo vazio. |
 | Sem locução verbal idiomática (Regra 9.3) | "O job deixou de correr." | Se o job parou: "O job parou de executar." Se o job não executou desta vez: "O job não executou." | "Deixar de" + infinitivo tem duas leituras. O sentido da locução não vem das partes, e esse é o motivo da Regra 9.3. |
-| Sem gíria técnica (Regra 9.3) | "Suba o contentor e faça um push da branch." | "Inicie o contentor. Envie a branch para o repositório remoto." | "Subir" tem quatro sentidos: "iniciar", "publicar", "enviar" e "aumentar a versão". "Fazer um push" junta um verbo vazio a um termo em inglês. A reescrita também separa as duas instruções. |
+| Sem gíria técnica (Regra 9.3) | "Suba o contentor e dê um push à branch." | "Inicie o contentor. Envie a branch para o repositório remoto." | "Subir" tem quatro sentidos: "iniciar", "publicar", "enviar" e "aumentar a versão". "Dar um X" é uma construção coloquial. Para esta ação, o português tem um verbo exato ("enviar"), que também é preferível a "faça um push". A reescrita também separa as duas instruções. |
 | Condição antes da instrução | "Apague a pasta antiga se a cópia de segurança terminou sem erros." | "Se a cópia de segurança terminou sem erros, apague a pasta antiga." | Quem age antes de ler o fim da frase apaga a pasta e não vê a condição. |
 
 ## Parte 2: regras próprias do português europeu
@@ -30,9 +30,12 @@ Estas regras não existem no STE. Elas cobrem fontes de ambiguidade do portuguê
 | Estar a + infinitivo | "O job está executando." | "O job está a executar." | O gerúndio de ação em curso é a forma do Brasil. Em Portugal, "estar a" + infinitivo diz o mesmo e soa natural. |
 | Vocabulário de Portugal | "Salve o arquivo e baixe o pacote." | "Guarde o ficheiro e descarregue o pacote." | As formas do Brasil denunciam um texto gerado sem cuidado. "Salvar" é resgatar, e "baixar" é diminuir. |
 | Colocação do pronome | "O agente o envia ao servidor." | "O agente envia o ficheiro ao servidor." Se o pronome ficar: "O agente envia-o ao servidor." | A ênclise é a colocação normal em Portugal. Repetir o nome evita a dúvida e a colocação errada. |
-| Decalque: "eventualmente" | "O cache é eventualmente invalidado." | Se o sentido é "eventually": "O cache é invalidado em algum momento." Se o sentido é "por vezes": "O cache é invalidado por vezes." | Em português, "eventualmente" quer dizer "por vezes" ou "por acaso". Quem escreve a pensar em "eventually" quer dizer "mais cedo ou mais tarde". A voz passiva fica, porque a fonte não diz quem invalida o cache. |
+| Decalque: "eventualmente" | "A cache é eventualmente invalidada." | Se o sentido é "eventually": "A cache é invalidada em algum momento." Se o sentido é "por vezes": "A cache é invalidada por vezes." | Em português, "eventualmente" quer dizer "por vezes" ou "por acaso". Quem escreve a pensar em "eventually" quer dizer "mais cedo ou mais tarde". A voz passiva fica, porque a fonte não diz quem invalida a cache. |
 | Decalque: "uma vez que" | "Uma vez que o deploy terminou, o agente liberta o tráfego." | Se é tempo: "Depois de o deploy terminar, o agente liberta o tráfego." Se é causa: "Como o deploy terminou, o agente liberta o tráfego." | Com o indicativo, "uma vez que" indica causa ("já que"). Como decalque de "once", indica tempo. |
 | Locução prolixa e verbo-suporte | "O servidor encontra-se indisponível. Favor efetuar uma nova tentativa." | "O servidor está indisponível. Tente de novo." | "Encontra-se" é "está" com mais palavras. "Favor efetuar" junta o infinitivo de cortesia ao verbo-suporte. |
+| Estrangeirismo conjugado | "A correção está na branch `feat/x`, por commitar." | "A correção está na branch `feat/x`, ainda sem commit." | "Commitar" conjuga um termo inglês como verbo português, e a forma deformada não aparece no glossário nem numa pesquisa pela palavra. O termo intacto ("commit") aparece. Quando a frase pede um verbo, use "fazer": "faça commit". |
+| "Ser preciso" com dois sentidos | "Se sim, a correção deixa de ser precisa e a tarefa fecha." | "Se sim, a correção fica desnecessária e a tarefa fecha." | "Precisa" quer dizer necessária ou exata. A reescrita usa a palavra do sentido que o autor quis. |
+| Contraste com uma negação | "Teste todos os clientes, a começar pelo VS Code, e não só o OpenCode." | "Teste todos os clientes, a começar pelo VS Code. O OpenCode é um deles." | A metade negada põe no texto uma afirmação que ninguém fez, e o leitor tem de a ler e descartar. A reescrita diz o mesmo pela positiva e mantém o OpenCode. |
 
 ## Parte 3: aplicado à saída de agentes
 
@@ -125,9 +128,9 @@ Decisões que vale a pena declarar em vez de esconder:
 - 43 palavras, acima do limite de 27 para descrições.
 
 **Depois:**
-> Este cache usa a similaridade semântica entre prompts para reduzir os cache misses, um problema comum em aplicações de grandes modelos de linguagem (LLM). Ele funciona com a stack existente e não prende o utilizador a um fornecedor.
+> Esta cache usa a similaridade semântica entre prompts para reduzir os cache misses, um problema comum em aplicações de grandes modelos de linguagem (LLM). Ela funciona com a stack existente e não prende o utilizador a um fornecedor.
 
-O modo Flexível não impôs um termo fixo por conceito. Ainda assim, cortou os adjetivos de marketing, o ponto e vírgula, o decalque e a frase longa. A reescrita não explica como um cache comum funciona, porque a fonte não explica.
+O modo Flexível não impôs um termo fixo por conceito. Ainda assim, cortou os adjetivos de marketing, o ponto e vírgula, o decalque e a frase longa. A reescrita não explica como uma cache comum funciona, porque a fonte não explica.
 
 ### Exemplo E: documento com estrutura (ISO 24495-1)
 
