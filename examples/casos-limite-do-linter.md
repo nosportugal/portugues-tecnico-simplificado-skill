@@ -1,11 +1,11 @@
 # Casos-limite do linter
 
-Este arquivo tem violações estruturais intencionais. Use este arquivo para testar o linter.
+Este ficheiro tem violações estruturais intencionais. Use o ficheiro para testar o linter.
 
 ## Itens de lista incompletos
 
 - Defina o alvo e
-- Registre o resultado ou
+- Registe o resultado ou
 
 ## Bloco de código
 
