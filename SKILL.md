@@ -10,7 +10,7 @@ O ASD-STE100 (Simplified Technical English, ou STE) é uma norma de linguagem co
 
 O STE existe só em inglês, e não há norma equivalente para o português. Esta skill leva a mesma disciplina para o português europeu e para outro leitor: um **agente de IA ou um sistema**. Esse leitor precisa de interpretar um texto sem um humano para resolver ambiguidades. O texto pode ser uma mensagem de erro, a descrição de uma ferramenta, uma instrução entre agentes ou um relatório de estado. Um humano pode ler "o job deve terminar em cinco minutos" como ordem ("tem de terminar") ou como estimativa ("provavelmente termina"). Um modelo de linguagem também pode.
 
-A skill junta ao STE os princípios da ISO 24495-1 (linguagem clara): o texto é relevante, localizável, compreensível e utilizável. A ISO escreve para leitores humanos. Por isso a skill adapta alguns pontos para um leitor-máquina (veja Fontes e escopo).
+A skill junta ao STE os princípios da ISO 24495-1 (linguagem clara): o texto é relevante, localizável, compreensível e utilizável. A ISO escreve para leitores humanos. Por isso a skill adapta alguns pontos para um leitor-máquina (veja Fontes e âmbito).
 
 ## Quando usar esta skill
 
@@ -22,27 +22,31 @@ A skill junta ao STE os princípios da ISO 24495-1 (linguagem clara): o texto é
 
 Esta skill não serve para textos criativos nem de marketing. O estilo do STE é plano e literal de propósito. Não aplique a skill a um texto em que a voz, a nuance ou a persuasão são o objetivo. Ela também não é uma ferramenta de linguagem clara para o cidadão. Ela escreve para leitores técnicos e para máquinas.
 
+A regra do tratamento uniforme (veja Regras centrais) vale para textos que um agente lê. Numa mensagem dirigida a uma pessoa, como um comentário num pull request, mantenha o tratamento do autor (entre colegas, muitas vezes "tu"). O "você" continua a ser uma marca do Brasil, e o linter marca-o em `marca-do-brasil`. Para esses textos, `--desativar tratamento-pessoal` desliga no linter a regra do "tu".
+
 ## Dois modos
 
 Escolha um modo antes de reescrever. Se o utilizador não disser qual, deduza o modo pelo tipo de texto. Informe o modo só quando o utilizador pedir a tabela de regras (veja Formato da saída).
 
-**Estrito**: procedimentos, mensagens de erro, descrições de ferramentas e funções, instruções entre agentes, textos de segurança. Vale para todo o lugar onde uma leitura errada tem custo. Aplique todas as regras abaixo, incluindo os limites de palavras e a disciplina de uma palavra para um significado.
+**Estrito**: procedimentos, mensagens de erro, descrições de ferramentas e funções, instruções entre agentes, textos de segurança. Vale para qualquer texto em que uma leitura errada tenha custo. Aplique todas as regras abaixo, incluindo os limites de palavras e a disciplina de uma palavra para um significado.
 
 **Flexível**: READMEs, descrições de pull request, changelogs, prosa explicativa. Aplique as regras estruturais por inteiro e trate as regras lexicais como recomendação (veja a divisão em Regras centrais). Na prática, mantém os limites de palavras, a voz ativa e os tempos simples. Mantém também a proibição de ponto e vírgula, verbo-suporte, gíria técnica, locuções prolixas e adjetivos de marketing. Abandona o vocabulário fixo. A prosa precisa de alguma variedade, e uma reescrita estrita de prosa parece um transplante de personalidade, não um esclarecimento.
 
 Os dois modos e a divisão entre regras estruturais e lexicais são a mesma distinção vista de dois lados. A divisão diz quais regras esta skill consegue verificar sem um dicionário. Os modos dizem quais delas impor em cada tipo de texto.
 
-## Fontes e escopo
+## Fontes e âmbito
 
 Esta skill segue as **categorias de regras** do ASD-STE100 Issue 9 (janeiro de 2025). A norma tem 53 regras de redação em 9 secções: escolha de palavras, gramática, estrutura da frase e estilo. Ela tem também um dicionário de cerca de 900 palavras aprovadas, cada uma com um significado e uma classe gramatical. O dicionário lista ainda cerca de 1200 palavras a evitar, com substitutas sugeridas. O resumo e as paráfrases estão em `references/regras-de-redacao.md`.
 
 A skill **não** reproduz o dicionário do ASD. O ASD-STE100 é gratuito, mas a redistribuição não é livre. O Issue 9 (página 2) proíbe a reprodução sem autorização escrita de um dirigente do ASD. Além disso, o dicionário é de palavras inglesas e não serve para o português.
 
-A skill usa também a **ISO 24495-1:2023**, adotada em Portugal como NP ISO 24495-1:2024 ("Linguagem clara. Parte 1: Princípios de base e orientações"). A skill parafraseia a norma e não a reproduz. Os números das cláusulas citados abaixo seguem a ISO. O ficheiro `docs/MAPEAMENTO-ISO-24495-1.md` diz o que a skill adotou, o que adaptou e o que não aplica. Em resumo:
+A skill usa também a **ISO 24495-1:2023**. A skill parafraseia a norma e não a reproduz. O ficheiro `docs/MAPEAMENTO-ISO-24495-1.md` diz o que a skill adotou, o que adaptou e o que não aplica. Em resumo:
 
 - A ISO pede um tom dirigido ao leitor ("tu" ou "você"). A skill usa o imperativo sem pronome e a terceira pessoa (veja Tratamento uniforme).
 - A ISO pede variação no tamanho das frases, para dar ritmo. A skill não pede essa variação, porque um agente não precisa de ritmo.
 - A ISO pede imagens de apoio e testes com leitores. A skill não trata imagens, e o teste passa a ser a execução da tarefa por um agente.
+
+Em Portugal existe a NP ISO 24495-1:2024 ("Linguagem clara. Parte 1: Princípios de base e orientações"), com o mesmo número. A página do Instituto Português da Qualidade (IPQ) não diz que a NP adota a ISO. Os números das cláusulas citados nesta skill seguem a ISO e coincidem com os da adoção brasileira da norma. Falta verificá-los na NP.
 
 Esta skill aplica o *princípio* do STE: a palavra mais simples e comum, usada sempre do mesmo modo. Ela adapta as regras estruturais à gramática do português europeu. Acrescenta também regras para fontes de ambiguidade que o inglês não tem. Exemplos: o "dever" ambíguo, o "seu" com dois donos, o sujeito oculto e a colocação do pronome.
 
@@ -60,7 +64,7 @@ Aplique as regras estruturais com confiança. Aplique as regras lexicais como um
 |---|---|---|
 | Voz ativa (ISO 5.3.3 c) | "O agente apaga o ficheiro." | "O ficheiro é apagado pelo agente." ou "Apaga-se o ficheiro." A partícula "se" também esconde quem age. Use a voz passiva só quando quem age é desconhecido ou irrelevante. |
 | Verbo pleno, sem verbo-suporte (Regra 3.7) | "Analise o registo." / "Remova o painel." | "Efetue uma análise do registo." / "Proceda à remoção do painel." / "Dê início ao processo." O substantivo de ação alonga a frase e esconde quem age. |
-| Sem locuções verbais idiomáticas nem gíria técnica (Regra 9.3) | "O job parou de executar." / "Inicie o servidor." / "Envie a branch para o repositório remoto." | "O job deixou de correr." (parou, ou não executou desta vez?) / "Suba o servidor." / "Faça um push da branch." O sentido de uma locução verbal não vem das partes. "Subir" sozinho tem quatro sentidos: "iniciar", "publicar", "enviar" e "aumentar a versão". |
+| Sem locuções verbais idiomáticas nem gíria técnica (Regra 9.3) | "O job parou de executar." / "Inicie o servidor." / "Envie a branch para o repositório remoto." | "O job deixou de correr." (parou, ou não executou desta vez?) / "Suba o servidor." / "Dê um push à branch." O sentido de uma locução verbal não vem das partes. "Subir" sozinho tem quatro sentidos: "iniciar", "publicar", "enviar" e "aumentar a versão". |
 | Sem locuções prolixas | "para", "porque", "sobre", "está" | "de forma a", "por forma a", "tendo em conta que", "no que diz respeito a", "no âmbito de", "a nível de", "encontra-se", "sendo que". Várias palavras no lugar de uma alongam a frase e não acrescentam sentido. |
 | Uma instrução por frase (ISO 5.3.4 a) | "Abra o ficheiro. Leia a linha 3." | "Abra o ficheiro e leia a linha 3, depois confirme se ela corresponde." |
 | Condição antes da instrução (ISO 5.2.2 e) | "Se a cópia de segurança terminou, apague a pasta." | "Apague a diretoria se a cópia de segurança terminou." Quem age antes de ler o fim da frase não vê a condição. Um aviso de segurança também vem antes da ação. |
@@ -102,9 +106,9 @@ Estas regras vêm do Princípio 2 (localizável) da ISO. O linter só cobre as f
 | Uma palavra, um significado (ISO 5.3.2 g) | Escolha um verbo para uma ação e use-o sempre. Por exemplo, sempre "verifique", sem alternar "verifique", "confirme", "controle" e "valide" para a mesma ação. Evite também as palavras com dois sentidos no mesmo contexto. | Alternar sinónimos para a mesma ideia ao longo do documento. Escrever "exclua o ficheiro do pacote", que pode ser apagar o ficheiro ou deixar o ficheiro de fora. Escreva "apague" ou "não inclua". | A consistência dentro do documento é verificável. Qual palavra é a *aprovada* não é, porque não existe dicionário aprovado para o português. |
 | Uma classe gramatical por palavra | "Registe o evento no registo." (registo = substantivo) | "Logue o evento." (log virou verbo) | Sem dicionário, não há lista das palavras que são só substantivo. Prefira a forma substantiva quando as duas se leem bem. Não declare conformidade. |
 | Termos de domínio (ISO 5.3.2 c) | Mantenha os termos técnicos necessários e defina cada um uma vez se ele não for comum. O STE permite um glossário próprio do projeto além do dicionário-base. | Jargão que o texto nunca define | A permissão de glossário existe no STE, mas o dicionário-base que ela estende não existe em português. |
-| Vocabulário de Portugal | "ficheiro", "ecrã", "equipa", "utilizador", "pedido", "palavra-passe", "descarregar", "guardar", "aceder", "registo" | O vocabulário do português do Brasil: "arquivo", "tela", "equipe", "usuário", "requisição", "senha", "baixar", "salvar", "acessar", "log" como substantivo comum | Quem lê pt-PT estranha as formas brasileiras, e o desvio sinaliza texto gerado sem cuidado. O limite varia por equipa. O glossário do projeto decide. |
+| Vocabulário de Portugal | "ficheiro", "ecrã", "equipa", "utilizador", "pedido", "palavra-passe", "descarregar", "guardar", "aceder", "registo", "partilhar", "base de dados" | O vocabulário do português do Brasil: "arquivo", "tela", "equipe", "usuário", "requisição", "senha", "baixar", "salvar", "acessar", "log" como substantivo comum, "compartilhar", "banco de dados" | Quem lê pt-PT estranha as formas brasileiras, e o desvio sinaliza texto gerado sem cuidado. O limite varia por equipa. O glossário do projeto decide. |
 | Palavras de dois sentidos em pt-PT | "Envie o ficheiro" (upload), "descarregue o ficheiro" (download), "prima Enter" (tecla), "carregue o módulo" só se o glossário disser que "carregar" é "ler para a memória". / "A hiperligação abre a página." / "A ligação de rede falhou." / "Execute o programa." | "Carregue o ficheiro." ("carregar" é enviar, ler para a memória ou premir). "A ligação abriu a página." ("ligação" é link ou ligação de rede.) "O programa corre." ("correr" é executar ou fluir.) "O registo falhou." (log ou registo de um dado?) | O português de Portugal tem estas ambiguidades próprias. Sem glossário, escolha a forma sem dupla leitura. |
-| Estrangeirismos e falsos cognatos | Use a palavra portuguesa consolidada: "apagar", "definir", "desempenho", "obrigatório". Mantenha empréstimos técnicos consolidados (commit, deploy, backup) e defina-os se o leitor puder não os conhecer. | "Deletar", "setar", "performance", "performar", "mandatório". Falsos cognatos: "eventualmente" (= por vezes, não "por fim"), "assumir que" (= supor), "endereçar o problema" (= tratar), "suportar JSON" (= aceitar), "realizar que" (= perceber). | O limite entre empréstimo consolidado e anglicismo evitável varia por equipa. O glossário do projeto decide. |
+| Estrangeirismos e falsos cognatos | Use a palavra portuguesa consolidada: "apagar", "definir", "desempenho", "obrigatório". Mantenha empréstimos técnicos consolidados (commit, deploy, backup) e defina-os se o leitor puder não os conhecer. Para a ação, prefira um verbo português sem ambiguidade ("envie a branch para o repositório remoto"). Se não houver, use o empréstimo intacto com o verbo "fazer" ("faça merge", "faça deploy"). É a exceção à regra do verbo-suporte. Quando há verbo exato, o linter marca o "fazer" como consultivo ("fazer um push" é "enviar", "fazer um restart" é "reiniciar"). | "Deletar", "setar", "performance", "performar", "mandatório". O empréstimo conjugado como verbo português ("deployar", "commitar", "forkado"). A forma deformada não aparece no glossário nem numa pesquisa pela palavra, e um tradutor automático não a reconhece. Falsos cognatos: "eventualmente" (= por vezes, não "por fim"), "assumir que" (= supor), "endereçar o problema" (= tratar), "suportar JSON" (= aceitar), "realizar que" (= perceber). | O limite entre empréstimo consolidado e anglicismo evitável varia por equipa. O glossário do projeto decide. |
 
 ### Tempos verbais: aplique com exceções
 
@@ -121,9 +125,9 @@ Evite também o mais-que-perfeito simples ("falhara"). Ele difere do futuro ("fa
 
 **A modalidade é a exceção.** As formas compostas com verbo modal carregam a ressalva. Exemplos: "pode ter falhado", "deve ter bloqueado", "talvez tenha falhado" e "teria falhado". No jornalismo, "teria falhado" quer dizer "supostamente falhou". Mantenha essas formas. Quando a regra dos tempos e a regra da modalidade entram em conflito, a modalidade vence.
 
-## Lista de varredura
+## Lista de verificação
 
-Os hábitos abaixo explicam a maior parte da dificuldade de ler um texto em português gerado por máquina. Os hábitos de 1 a 8 são mecânicos: aponte a palavra ou o sinal exato que quebra a regra. Os hábitos de 9 a 11 pedem julgamento, porque a mesma palavra às vezes está certa. Procure todos antes de reescrever.
+Os hábitos abaixo explicam a maior parte da dificuldade de ler um texto em português gerado por máquina. Os hábitos de 1 a 8 são mecânicos: aponte a palavra ou o sinal exato que quebra a regra. Os hábitos de 9 a 12 pedem julgamento, porque a mesma palavra às vezes está certa. Procure todos antes de reescrever.
 
 1. **Rotação de sinónimos**: a mesma coisa recebe vários nomes no mesmo documento ("o utilizador", "o cliente", "o consumidor"). O leitor não sabe se é uma coisa ou três. Correção: escolha um nome e use-o sempre.
 2. **Empilhamento de ressalvas**: verbos auxiliares e qualificadores acumulam-se até a frase não afirmar nada ("importa salientar que isto pode potencialmente ajudar a melhorar"). Correção: afirme o facto ou corte a frase.
@@ -131,22 +135,25 @@ Os hábitos abaixo explicam a maior parte da dificuldade de ler um texto em port
 4. **Adjetivos de marketing**: palavras que afirmam qualidade em vez de a mostrar. Por exemplo: "robusto", "poderoso", "inovador", "intuitivo", "de ponta", "revolucionário", "sem esforço". Correção: corte, ou troque pela medida que justifica a afirmação.
 5. **Frases encadeadas**: várias ideias ligadas por ponto e vírgula, travessão, "sendo que" ou gerúndio depois de vírgula. Correção: uma ideia por frase.
 6. **Gerundismo**: "vou estar a enviar", "vamos estar a verificar". Correção: "vou enviar", "verificaremos".
-7. **Gíria técnica e locuções verbais**: "subir o servidor", "fazer um push", "bater no endpoint", "deixar de correr", "acabar com o processo". O sentido não vem das partes. Correção: o verbo exato ("iniciar", "enviar", "chamar", "parar de", "apagar").
+7. **Gíria técnica e locuções verbais**: "subir o servidor", "dar um push", "bater no endpoint", "deixar de correr", "acabar com o processo". O sentido não vem das partes. Correção: o verbo exato ("iniciar", "enviar", "chamar", "parar de", "apagar").
 8. **Números e datas ambíguos**: "1.000", "07/10/2026". Correção: "1000", "2026-10-07" ou, sem o ano, "7 de outubro".
 9. **Decalques do inglês**: construções copiadas do inglês. Exemplos: "eventualmente" no sentido de "por fim", "assumir que", "endereçar o problema", "suportar o formato" e "alavancar". Outros: "uma vez que" no sentido de "depois de" e o "seu" em excesso ("Abra o seu navegador" em vez de "Abra o navegador"). Modelos treinados sobretudo em inglês produzem este traduzês com frequência. Correção: use a construção do português.
 10. **Referência solta**: "o mesmo" ou "a mesma" no lugar de um nome, "seu" ou "sua" com dois donos possíveis, um pronome longe do nome. Correção: repita o nome.
 11. **Marcas do português do Brasil**: vocabulário ("arquivo", "tela", "usuário", "baixar") e gerúndio de ação em curso ("está rodando"). Outras marcas: pronome antes do verbo ("Me envie", "O agente o envia") e "você". Correção: a forma de Portugal ("ficheiro", "ecrã", "utilizador", "descarregar", "está a executar", "Envie-me", "O agente envia-o").
+12. **Contraste com uma negação**: "não é um bug, é uma decisão", "mede a latência, não o custo", "não só o painel, mas também a lista". A metade negada põe no texto uma afirmação que ninguém fez, e o leitor tem de a ler e descartar. Correção: a forma afirmativa ("é uma decisão", "mede a latência", "o painel e a lista"). Se a negação tira uma leitura errada provável, ela é conteúdo e fica.
 
 ## Processo
 
 1. Fixe o leitor, o objetivo e o contexto (ISO 5.1). Quem lê o texto (agente, pipeline, pessoa)? O que faz o leitor com ele? O leitor pode pedir esclarecimentos? Se o texto vai para um agente que não pode perguntar, aplique o modo Estrito.
 2. Escolha o modo (Estrito ou Flexível). Informe o modo só quando o utilizador pedir a tabela de regras (veja Formato da saída).
 3. Leia o texto uma vez pelo sentido. Não comece a reescrever antes de entender o que o texto ainda precisa de dizer depois.
-4. Percorra o texto frase por frase. Marque cada violação das tabelas de Regras centrais e cada hábito da Lista de varredura. No modo Flexível, marque as regras lexicais, mas não as imponha. Para uma primeira passagem mecânica, execute `scripts/pts-lint.py` (stdin ou ficheiros, `--json` para saída estruturada, `--ajuda` para as regras e as opções). O linter nunca marca ressalvas nem modalidade. Ele trata o texto entre aspas como menção e não o analisa. Ele não verifica a ordem direta, o sujeito oculto, o "seu" ambíguo, o "dever" ambíguo, a colocação do pronome nem o tratamento misto. Das regras de estrutura do documento, ele verifica só os títulos, o tamanho do parágrafo, as siglas, os incisos e os passos em prosa. Esses achados são consultivos.
-5. Reescreva cada frase marcada. Corrija a violação e preserve o sentido original com exatidão. Se a reescrita perder uma precisão necessária (uma condição de segurança, um limite de escopo, um número), mantenha a forma longa e sinalize. Não simplifique em silêncio.
+4. Percorra o texto frase por frase. Marque cada violação das tabelas de Regras centrais e cada hábito da Lista de verificação. No modo Flexível, marque as regras lexicais, mas não as imponha. Para uma primeira passagem mecânica, execute `scripts/pts-lint.py` (stdin ou ficheiros, `--json` para saída estruturada, `--ajuda` para as regras e as opções). O linter nunca marca ressalvas nem modalidade. Ele trata o texto entre aspas como menção e não o analisa. Ele não verifica a ordem direta, o sujeito oculto, o "seu" ambíguo, o "dever" ambíguo, o tratamento misto nem a maior parte da colocação do pronome. Das regras de estrutura do documento, ele verifica só os títulos, o tamanho do parágrafo, as siglas, os incisos e os passos em prosa. Esses achados são consultivos.
+5. Reescreva cada frase marcada. Corrija a violação e preserve o sentido original com exatidão. Se a reescrita perder uma precisão necessária (uma condição de segurança, um limite de âmbito, um número), mantenha a forma longa e sinalize. Não simplifique em silêncio.
    - **Verifique a modalidade antes de fechar a reescrita.** Ressalvas ("pode", "poderia", "por vezes", "é provável que") carregam o grau de certeza do autor, e o grau de certeza é conteúdo. Uma frase mais curta que promove uma ressalva a facto não é uma simplificação. É outra afirmação. Este é o erro mais comum numa reescrita bem-intencionada, porque as ressalvas são justamente o que o limite de palavras convida a cortar.
+   - **Não acrescente ressalvas a um facto.** É o outro lado da regra da modalidade. Se a fonte afirma um facto ou dá uma medida, a reescrita não junta "talvez" nem "pelo que percebi". Uma ressalva num número medido torna incerto o que era certo.
    - **Não resolva sozinho a ambiguidade de "dever".** Se a fonte diz "o job deve terminar em cinco minutos" e o contexto não diz se é ordem ou estimativa, não escolha. Mantenha a frase e sinalize na linha `Mantido como está:`.
    - Nunca acrescente um facto que a fonte não afirmou. Uma reescrita que fica melhor porque fornece uma causa, uma frequência ou um mecanismo é outro texto, não uma reescrita.
+   - Não acrescente um exemplo ou um item só para a enumeração ficar com três. Um terceiro exemplo inventado é conteúdo que a fonte não deu.
 6. Entregue o texto reescrito (veja Formato da saída). Guarde para si a escolha de modo e a análise das regras, a menos que o utilizador peça para as ver.
 7. Se o texto já está conforme, diga isso. Não force mudanças num texto conforme.
 8. Quando o custo de um erro é alto, teste o resultado: peça a um agente que execute a tarefa a partir do texto reescrito, sem outro contexto. Se o agente falhar, o texto ainda tem uma ambiguidade (ISO 5.4, adaptada).
@@ -187,7 +194,7 @@ Quando o texto está num repositório (comentários, docstrings, READMEs, textos
 **A skill faz:**
 - Reescreve um português ambíguo ou denso em frases curtas, de significado único e na voz ativa.
 - Devolve só o texto reescrito por predefinição, e nomeia as regras aplicadas quando o utilizador pede.
-- Preserva cada facto, condição e limite de escopo do original.
+- Preserva cada facto, condição e limite de âmbito do original.
 - Preserva a força de cada ressalva e não acrescenta afirmações que a fonte não fez.
 - Usa o vocabulário, a ortografia e a gramática do português europeu.
 - Usa a flexão de género da norma culta: o masculino genérico ou um nome sem flexão de género.
@@ -198,13 +205,13 @@ Quando o texto está num repositório (comentários, docstrings, READMEs, textos
 - Reproduzir o texto da ISO 24495-1 ou da NP ISO 24495-1. Ela só a parafraseia.
 - Simplificar textos criativos, de marketing ou persuasivos, em que a voz e a nuance são o objetivo.
 - Converter texto do português do Brasil para o de Portugal como tarefa principal. Ela corrige as marcas do português do Brasil que encontra, mas o objetivo é a ambiguidade.
-- Cortar em silêncio uma condição de segurança, uma exceção ou um limite de escopo para encurtar uma frase. Ela sinaliza a troca.
+- Cortar em silêncio uma condição de segurança, uma exceção ou um limite de âmbito para encurtar uma frase. Ela sinaliza a troca.
 - Converter "pode ter falhado" em "falhou", ou "pode ser causado por X" em "X é a causa". Perder uma ressalva muda a afirmação.
 - Escolher em silêncio entre os dois sentidos de "dever" (ordem ou estimativa).
 - Garantir um documento conforme ao STE nem à ISO 24495-1. O STE é uma norma em inglês, e a ISO escreve para leitores humanos. Esta skill é uma ferramenta geral de clareza inspirada nas duas, não uma ferramenta certificada.
-- Revisar ortografia e gramática como objetivo principal. A skill trata de ambiguidade.
+- Rever a ortografia e a gramática como objetivo principal. A skill trata de ambiguidade.
 - Tornar verdadeiro ou útil um conteúdo fraco. O STE corrige a *forma* de um texto, não a substância. Um parágrafo vazio reescrito com estas regras vira um parágrafo vazio limpo, curto e bem pontuado. Se o texto não tem nada a dizer, nenhuma reescrita resolve isso. Diga isso em vez de polir o texto.
-- Encurtar além do ponto da clareza. O objetivo não é cortar palavras, é tirar a ambiguidade. A partir de certo ponto, a compressão começa a custar tempo ao leitor em vez de economizar. Pare quando a frase não tiver ambiguidade, não quando ela for a mais curta possível.
+- Encurtar além do ponto da clareza. O objetivo é tirar a ambiguidade, e cortar palavras só ajuda até certo ponto. A partir daí, a compressão começa a custar tempo ao leitor em vez de o poupar. Pare assim que a frase tiver uma só leitura, mesmo que ainda dê para a encurtar.
 
 ## Recursos adicionais
 

@@ -24,7 +24,7 @@ Por fazer:
 
 - Ler a NP ISO 24495-1:2024 e verificar a numeração e a terminologia.
 - Medir o tamanho do português europeu para os limites de palavras.
-- Detetar a colocação do pronome no linter.
+- Detetar mais casos de colocação do pronome no linter. Hoje o linter deteta o pronome no início da frase ("Me envie") e a ênclise depois de "não", "nunca", "já", "também", "que", "quando" e "onde" ("não envia-o").
 - Testar o `npx skills add` a partir do GitHub, depois da fusão.
 
 ## Trabalho a fazer (plano original)

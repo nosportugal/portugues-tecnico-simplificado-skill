@@ -56,17 +56,21 @@ diretiva-invalida.
 
 Regras consultivas: voz-passiva, passiva-sintetica, tempo-composto,
 cadeia-de-preposicoes, o-mesmo, gerundio-encadeado, decalque-do-ingles,
+giria-tecnica ("fazer um push", "fazer um restart", quando há verbo português
+exato),
 locucao-verbal, palavra-ambigua, ser-estar, travessao, gerundismo (outros
 verbos), data-ambigua (dia/mês sem ano) e numero-ambiguo (três casas depois
-da vírgula). Elas nunca reprovam a execução.
+da vírgula, e "bilhão"). Elas nunca reprovam a execução.
 
 Regras do português europeu e da ISO 24495-1, todas consultivas:
-marca-do-brasil (vocabulário e gerúndio do Brasil), tratamento-pessoal
-("você", "tu"), sigla (sigla sem o nome por extenso na primeira ocorrência),
-titulo (nível saltado, título repetido ou longo), paragrafo-longo
-(`--max-frases`, predefinição 6), inciso (incisos entre o sujeito e o verbo, e
-parênteses longos a meio da frase) e passos-em-prosa. O gerundismo também
-cobre "vou estar a enviar".
+marca-do-brasil (vocabulário, acentos, "você" e gerúndio do Brasil),
+tratamento-pessoal ("tu"), colocacao-do-pronome ("Me envie", "não envia-o"),
+verbo-deformado ("deployou", "commitar"), contraste-com-negacao ("não é X, é
+Y", "X, não Y", "não só X, mas Y"), sigla (sigla sem o nome por extenso na
+primeira ocorrência), titulo (nível saltado, título repetido ou longo),
+paragrafo-longo (`--max-frases`, predefinição 6), inciso (incisos entre o
+sujeito e o verbo, e parênteses longos a meio da frase) e passos-em-prosa. O
+gerundismo também cobre "vou estar a enviar".
 
 Sai com código 1 quando as violações obrigatórias passam da linha de base
 (predefinição 0). Sai com código 2 em erro de uso, inclusive numa opção ou regra
@@ -100,7 +104,7 @@ NAO_ACAO = (r"(?:(?:funç|aplicaç|vers|seç|sess|opç|informaç|quest|transaç|
             r"|coleç|dimens|extens)(?:ão|ões)|(?:docu|mo|ele|argu|equipa|seg|frag|instru)mentos?)\b")
 SUFIXO_DE_ACAO = r"(?:ções|ção|sões|são|mentos|mento|âncias|ância|ências|ência|agens|agem|ises|ise)"
 SUBSTANTIVO_DE_ACAO = (r"(?:\w+" + SUFIXO_DE_ACAO + r"|leitura|escrita|abertura|captura|consulta|busca"
-                       r"|pesquisa|cópia|coleta|limpeza|cobrança|entrega|troca)")
+                       r"|pesquisa|cópia|coleta|limpeza|cobrança|entrega|troca|gestão)")
 # Particípios. Palavras com vogal acentuada antes de -ido/-ado são adjetivos
 # ("rápido", "válida"), não particípios.
 PARTICIPIO = (r"(?![\w]*[áàâãéêíóôõú]\w*(?:ad|id)[oa]s?\b)"
@@ -158,6 +162,7 @@ SUPORTE_FIXO = [
      "Verbo-suporte. Use o verbo da ação ('remova', não 'proceda à remoção')."),
     (DAR + r"\s+início\b", "Verbo-suporte. Use 'iniciar' ou 'começar'."),
     (DAR + r"\s+resposta\s+(?:a|à|ao|às|aos)\b", "Verbo-suporte. Use 'responder'."),
+    (DAR + r"\s+seguimento\s+(?:a|à|ao|às|aos)\b", "Verbo-suporte. Use 'continuar' ou 'tratar'."),
     (r"lev(?:ar|a|am|e|em|ou|aram|ará|arão|ando|ado)\s+a\s+cabo\b", "Verbo-suporte. Use 'executar' ou 'concluir'."),
     (FAZER + r"\s+uso\b", "Verbo-suporte. Use 'usar'."),
     (r"lev(?:ar|a|am|e|em|ou|aram|ará|arão|ando|ado)\s+em\s+(?:consideração|conta)\b",
@@ -217,17 +222,15 @@ GIRIAS = [
      "'Derrubar' pode ser parar de propósito ou causar uma falha. Use 'parar', 'desligar' ou 'causar a falha de'."),
     (DAR + r"\s+(?:um|uma)\s+(?:push|pull|merge|commit|deploy|restart|reboot|refresh|reset|rollback|kill|start|stop"
      r"|ping|fetch|build|upgrade|checada|conferida|geral|tapa)\b",
-     "Gíria com 'dar um'. Use o verbo da ação: enviar, juntar, reiniciar, verificar."),
+     "Gíria com 'dar um'. Use o verbo português da ação ('enviar', 'reiniciar', 'verificar') ou, se não houver, "
+     "o empréstimo com 'fazer' ('fazer merge')."),
     (r"bat(?:er|e|em|a|am|eu|eram|endo|ido)\s+(?:n[oa]s?|em)\s+(?:\w+\s+)?"
      r"(?:endpoints?|api|servidor(?:es)?|serviços?|banco|url|rotas?|porta)\b",
      "'Bater em' é gíria. Use 'chamar' ou 'enviar um pedido a'."),
-    (FAZER + r"\s+(?:um\s+)?(?:push|pull|merge|commit|deploy|restart|reboot|refresh|reset|rollback|kill|ping|fetch"
-     r"|build|upgrade)\b",
-     "Gíria com 'fazer'. Use o verbo da ação: enviar, juntar, reiniciar, verificar."),
     (r"(?:pôr|põe|põem|pôs|ponha|ponham|ponho|meter|mete|metem|meteu|meta|metam)\s+(?:(?:o|a|os|as|um|uma|esse|essa|este|esta)\s+)?(?:\w+\s+)?"
      + OBJETO_TECNICO + r"\s+a\s+(?:correr|funcionar|andar)\b",
      "'Pôr a correr' é gíria. Use 'iniciar' ou 'executar'."),
-    (DAR + r"\s+(?:pau|ruim|tilt)\b", "Gíria. Diga o que aconteceu: 'falhou', 'travou' ou 'retornou o erro X'."),
+    (DAR + r"\s+(?:pau|ruim|tilt)\b", "Gíria. Diga o que aconteceu: 'falhou', 'travou' ou 'devolveu o erro X'."),
     (r"jog(?:ar|a|am|ue|uem|ou|aram|ando)\s+(?:(?:o|a|os|as|isso|isto|tudo)\s+)?(?:n[oa]s?|para\s+[oa]s?|pr[oa]s?)\s+"
      r"(?:log|logs|lixo|banco|cache|fila|tela|ecrã)\b",
      "'Jogar em' é gíria. Use 'gravar no registo', 'apagar' ou 'enviar para a fila', conforme o sentido."),
@@ -262,8 +265,30 @@ BRASILEIRISMOS = [
     (r"registr(?:ar|e|em|ou|aram|ando|ado|ada|ados|adas|o|os)", "Em Portugal, 'registar' e 'registo'."),
     (r"cadastr(?:ar|a|am|e|em|ou|aram|ando|ado|ada|ados|adas|o|os)", "Em Portugal, 'registar' ou 'inscrever'."),
     (r"gerenci(?:ar|a|am|e|em|ou|aram|ando|ado|ada|ados|adas|amento)", "Em Portugal, 'gerir' ou 'gestão'."),
-    (r"rod(?:ar|am|e|em|ou|aram|ando|ado|ada|ados|adas)",
-     "'Rodar' é do Brasil. Use 'executar' ('correr' também quer dizer fluir)."),
+    # "Rodar a chave" (trocar uma credencial) e "rodar os logs" (rotação de registos) estão certos em Portugal.
+    (r"rod(?:ar|am|e|em|ou|aram|ando|ado|ada|ados|adas)(?!\s+(?:a|as|o|os|uma|um)\s+(?:chaves?|credencia(?:l|is)"
+     r"|segredos?|tokens?|certificados?|keys?|palavras?-passe|logs?|registos?)\b)",
+     "'Rodar' no sentido de executar é do Brasil. Use 'executar' ('correr' também quer dizer fluir)."),
+    (r"compartilh\w*", "Em Portugal, 'partilhar'."),
+    (r"planej\w*",
+     "Em Portugal, 'planear' e 'planeamento'."),
+    (r"bancos?\s+de\s+dados", "Em Portugal, 'base de dados'."),
+    # Só com determinante, e fora de compostos ingleses ("time-to-live", "time zone", "time to first token").
+    (r"(?:o|os|do|dos|no|nos|ao|aos|pelo|pelos|um|nosso|nossos|seu|seus|esse|este|desse|deste)\s+times?(?!-)"
+     r"(?!\s+(?:to|series|zones?|stamps?|frames?|lines?|outs?|of|slots?|windows?)\b)",
+     "Em Portugal, 'a equipa'."),
+    (r"conosco", "Em Portugal, 'connosco'."),
+    (r"aplicativos?", "Em Portugal, 'aplicação' ou 'app'."),
+    (r"treinamentos?", "Em Portugal, 'formação' (de pessoas) ou 'treino' (de um modelo)."),
+    # Acento circunflexo antes de m ou n e vogal: "eletrônico", "fenômeno", "gênero", "acadêmico".
+    # "Estômago", "fêmea", "sêmola" e "pêne" levam circunflexo também em Portugal. Em "dêmos" o acento é
+    # facultativo.
+    (r"(?!estômag|fême|sêmol|pênes?\b|dêmos\b)\w*[ôê][mn][aeiouáéíóú]\w*",
+     "Acento do Brasil. Em Portugal, acento agudo: 'eletrónico', 'fenómeno', 'género', 'académico'."),
+    # Em marca-do-brasil, o "você" continua marcado com tratamento-pessoal desligado.
+    (r"vocês?",
+     "'Você' é do Brasil. Num texto para um agente, use o imperativo sem pronome ('Abra o ficheiro'). Numa "
+     "mensagem a uma pessoa, use o tratamento do autor ('tu' entre colegas)."),
     (r"mouses?", "Em Portugal, 'rato'."),
     (r"celulares?", "Em Portugal, 'telemóvel'."),
     (r"contatos?", "Em Portugal, 'contacto'."),
@@ -275,7 +300,7 @@ BRASILEIRISMOS = [
     (r"respectiv[oa]s?", "Em Portugal, 'respetivo'."),
     (r"(?:estou|está|estás|estamos|estão|estava|estavam|estive|esteve|estiveram|estará|estarão|esteja|estejam)\s+"
      r"(?:\w+mente\s+)?(?!(?:quando|comando|brando|bando|adendo|dividendo|remendo|tremendo|lindo|infindo"
-     r"|contrabando|fundo|mundo)\b)\w{3,}(?:ando|endo|indo)",
+     r"|contrabando|fundo|mundo)\b)(?:sendo|\w{3,}(?:ando|endo|indo))",
      "Gerúndio de ação em curso, do Brasil. Em Portugal, 'estar a' + infinitivo ('está a executar')."),
 ]
 
@@ -293,6 +318,69 @@ LOCUCAO_DE = "cerca antes depois além através dentro fora perto longe partir a
 INICIO_DE = "".join(f"(?<!{word} )" for word in LOCUCAO_DE + ["um", "uma"])
 NAO_ELO = r"(?!(?:e|ou|" + "|".join(LOCUCAO_DE) + r")\b|\d|(?-i:[A-ZÀ-Ý]))"
 ELO_DE = DE + r"(?:\s+" + NAO_ELO + r"\w+){1,2}\s+"
+
+# Estrangeirismos conjugados como verbos portugueses ("deployou", "por commitar", "forkado"). Ficam de fora
+# as terminações em "-e" e "-em", que coincidem com a palavra inglesa ("merge", "cache"), e os verbos que
+# já estão no dicionário ("clonar", "testar", "clicar").
+RAIZ_ESTRANGEIRA = (r"(?:pin|fork|deploy|merg|push|commit|comit|sync|cach|build|rebas|squash|debug|bump|patch"
+                    r"|track|trigg|mock|stream|upgrad|downgrad|hardcod|reset|restart|lint|skip|dump|flush|crash"
+                    r"|scroll|spawn|shipp|tagg|check|log|upload|download|pars|zip|throttl|fetch)")
+TERMINACAO_VERBAL = r"(?:ar|ei|ou|amos|aram|ava|avam|ado|ada|ados|adas|ando|asse|ará|arão|aria)"
+# Abrem uma oração subordinada. Depois delas, ", não o apague" é uma instrução.
+SUBORDINANTE = re.compile(r"(?:se|quando|caso|enquanto|depois|antes|como|porque|embora|mesmo|sempre|até|desde)\b",
+                          re.I)
+
+
+class _FilteredPattern:
+    """Um padrão cujos achados passam por um filtro sobre o texto inteiro."""
+
+    def __init__(self, pattern, keep):
+        self.pattern, self.keep = pattern, keep
+
+    def finditer(self, text):
+        return (m for m in self.pattern.finditer(text) if self.keep(text, m))
+
+
+def _sentence_start(text, match):
+    """O texto da frase do achado até ao início dele."""
+    return re.split(r"[.!?…]\s+", text[:match.start()])[-1].lstrip(" \"'“‘«(*_")
+
+
+def _in_main_clause(text, match):
+    """A frase do achado não começa por uma conjunção subordinativa."""
+    return not SUBORDINANTE.match(_sentence_start(text, match))
+
+
+# Palavras em "-o" que abrem uma frase sem serem um verbo na primeira pessoa do singular.
+NAO_PRIMEIRA_PESSOA = {"todo", "outro", "mesmo", "isso", "isto", "aquilo", "disso", "disto", "nisso", "nisto",
+                       "daquilo", "naquilo", "pelo", "algo", "pouco", "muito", "tanto", "quanto", "primeiro",
+                       "segundo", "terceiro", "último", "próprio", "nosso", "vosso", "novo", "tudo", "contudo",
+                       "logo", "portanto", "entanto", "junto", "cedo"}
+
+
+def _negates_a_noun(text, match):
+    """Em ", não o X", o X é um nome.
+
+    Numa frase na primeira pessoa do singular ("Recebo o ficheiro, não o envio."), um X em "-o" é o verbo
+    e o "o" é um pronome.
+    """
+    if not _in_main_clause(text, match):
+        return False
+    word = match.group("nome")
+    if not word or not word.lower().endswith("o"):
+        return True
+    first = re.match(r"\w+", _sentence_start(text, match))
+    first = first.group().lower() if first else ""
+    first_person = first == "eu" or (len(first) >= 3 and first.endswith("o") and first not in NAO_PRIMEIRA_PESSOA)
+    return not first_person
+
+
+def _not_a_name(text, match):
+    """A palavra começa por minúscula ou abre a frase. A maiúscula a meio da frase marca um nome ("a Pinar")."""
+    if match.group()[0].islower():
+        return True
+    before = text[:match.start()].rstrip(" \"'“‘«(*_")
+    return not before or before[-1] in ".!?:…"
 
 RULES = [
     ("ponto-e-virgula", OBRIGATORIA,
@@ -330,6 +418,11 @@ RULES = [
      "Possível gerundismo. Se a ação é pontual, use o futuro (enviaremos) ou 'ir' + infinitivo (vamos enviar). "
      "Se a ação dura um período ('vai estar a executar durante a janela'), mantenha."),
     *[("giria-tecnica", OBRIGATORIA, re.compile(r"\b" + pattern, re.I), message) for pattern, message in GIRIAS],
+    # "Fazer deploy" e "fazer merge" são o empréstimo com "fazer". Estes têm um verbo português exato.
+    ("giria-tecnica", CONSULTIVA,
+     re.compile(r"\b" + FAZER + r"\s+(?:um\s+)?(?:push|restart|reboot|refresh|kill)\b", re.I),
+     "Empréstimo com 'fazer' quando o português tem um verbo exato. Use 'enviar', 'reiniciar', 'atualizar' ou "
+     "'terminar'."),
     ("data-ambigua", OBRIGATORIA,
      re.compile(r"(?<![\w/.-])\d{1,2}[/-]\d{1,2}[/-](?:\d{4}|\d{2})(?![\w/-]|[.,]\d)"),
      "Data no formato dia/mês/ano: um leitor pode ler mês/dia. Use AAAA-MM-DD (2026-10-07)."),
@@ -347,6 +440,10 @@ RULES = [
      re.compile(r"(?<![\w.,/])\d{1,3},\d{3}(?![\w/]|[.,]\d)"),
      "Vírgula decimal com três casas: '1,500' pode ser lido como 1500. Mude a unidade (1500 ms) ou, se a "
      "precisão não importa, corte os zeros (1,5)."),
+    ("numero-ambiguo", CONSULTIVA,
+     re.compile(r"\bbilh(?:ão|ões)\b", re.I),
+     "'Bilhão' é do Brasil e vale mil milhões. Em Portugal, 'bilião' vale um milhão de milhões. Escreva "
+     "'mil milhões'."),
     ("linguagem-neutra", OBRIGATORIA,
      re.compile(r"\b(?:todes|elus?|delus?|nelus?|aquelus?|daquelus?|menines|amigues|alunes|usuáries|funcionáries"
                 r"|obrigade|querides|bem-vindes|todx|elx|delx|nelx|aquelx|amigx|alunx|meninx|usuárix|funcionárix"
@@ -401,11 +498,21 @@ RULES = [
                 r"|ídos|ídas|isse|issem)\b", re.I),
      "'Excluir' tem dois sentidos: apagar ('exclua o ficheiro') e deixar de fora ('exclua o ficheiro do "
      "pacote'). Use 'apagar' ou 'não incluir'."),
+    ("palavra-ambigua", CONSULTIVA,
+     re.compile(r"\bao\s+invés\s+d[eoa]s?\b", re.I),
+     "Em Portugal, 'ao invés de' quer dizer 'ao contrário de'. Para uma troca, use 'em vez de'."),
+    ("palavra-ambigua", CONSULTIVA,
+     # "É preciso" impessoal ("é preciso reiniciar", "é preciso uma chave") só quer dizer necessário. As outras
+     # formas concordam com um sujeito, e aí "precisa" também pode ser exata.
+     re.compile(r"\b(?:ser|é|são|foi|foram|era|eram|seja|sejam|for|forem|será|serão|seria|seriam)\s+"
+                r"precis(?:a|os|as)\b", re.I),
+     "'Ser preciso' tem dois sentidos: necessário e exato ('a correção deixa de ser precisa'). Use "
+     "'necessário' ou 'exato'."),
     ("ser-estar", CONSULTIVA,
      re.compile(r"\b(?:é|são|era|eram|foi|foram|será|serão|seja|sejam)\s+(?:\w+mente\s+)?" + ESTADOS + r"\b", re.I),
      "Um estado atual pede 'estar' ('o servidor está indisponível'). 'Ser' descreve o que a coisa é sempre."),
     ("tratamento-pessoal", CONSULTIVA,
-     re.compile(r"\b(?:você|vocês|tu|teu|tua|teus|tuas|contigo)\b", re.I),
+     re.compile(r"\b(?:tu|teu|tua|teus|tuas|contigo)\b", re.I),
      "Tratamento impessoal: use o imperativo sem pronome ('Abra o ficheiro') ou a terceira pessoa "
      "('A ferramenta abre o ficheiro')."),
     ("inciso", CONSULTIVA,
@@ -420,6 +527,44 @@ RULES = [
      "Passos em prosa corrida. Use uma lista numerada, com uma instrução por item."),
     *[("marca-do-brasil", CONSULTIVA, re.compile(r"\b(?:" + pattern + r")\b", re.I), message)
       for pattern, message in BRASILEIRISMOS],
+    ("verbo-deformado", CONSULTIVA,
+     _FilteredPattern(re.compile(r"\b" + RAIZ_ESTRANGEIRA + r"e?" + TERMINACAO_VERBAL + r"\b", re.I), _not_a_name),
+     "Estrangeirismo conjugado como verbo português. A forma deformada não aparece no glossário nem numa "
+     "pesquisa pela palavra, e um tradutor automático não a reconhece. Use um verbo português ('fixar', 'enviar') "
+     "ou o termo intacto com 'fazer' ('fazer deploy', 'fazer fork')."),
+    ("verbo-deformado", CONSULTIVA,
+     # k, w, y, "sh" e "ck" não existem em palavras portuguesas. Só minúsculas, para deixar de fora os nomes
+     # ("Huawei"). A lista apanha os nomes escritos em minúsculas ("huawei").
+     re.compile(r"\b(?!" + RAIZ_ESTRANGEIRA + r"e?" + TERMINACAO_VERBAL + r"\b|huawei\b)"
+                r"[a-z]{2,}(?:k|w|y|sh|ck)[a-z]*e?(?:ar|ado|ada|ados|adas|ando|aram|ei)\b"),
+     "Possível estrangeirismo conjugado ('linkar', 'trackear'). Use um verbo português ou o termo intacto "
+     "com 'fazer' ('fazer tracking')."),
+    ("contraste-com-negacao", CONSULTIVA,
+     _FilteredPattern(re.compile(r"(?<!que )\bnão\s+(?:é|são|foi|era|está|fica|serve)\b[^.!?;:]{1,60}?,\s*"
+                                 r"(?:é|são|foi|era|está|fica|serve)\b", re.I), _in_main_clause),
+     "Contraste com uma negação ('não é um bug, é uma decisão'). O leitor tem de ler e descartar a metade "
+     "negada. Diga só a forma afirmativa, a menos que a negação tire uma leitura errada provável."),
+    ("contraste-com-negacao", CONSULTIVA,
+     # Depois de "não", "o" e "a" são quase sempre pronomes: "Feche o ticket, não o apague." Só conta como
+     # artigo antes de uma palavra que não acaba como um verbo ("não o custo", "não os ficheiros"). Ficam de
+     # fora "-mos", "-z" ("faz"), o futuro ("terão") e "são", "estão", "vão", "dão" e "hão".
+     _FilteredPattern(re.compile(r",\s+(?:e\s+)?não\s+(?:(?:um|uma|só|apenas|de|do|da|em|no|na|para|por|com)\s+"
+                                 r"|(?:o|a|os|as)\s+(?!\w+mos\b|\w*[aeiô]rão\b|(?:são|estão|vão|dão|hão)\b)"
+                                 r"(?=(?P<nome>\w*(?:o|os|ão|ões|[bcdfghjklnpqrtvwx])\b)))"
+                                 r"[^.!?,;:]{1,50}?[.!?]", re.I), _negates_a_noun),
+     "Contraste com uma negação ('mede a latência, não o custo'). O leitor tem de ler e descartar a metade "
+     "negada. Diga só a forma afirmativa, a menos que a negação tire uma leitura errada provável."),
+    ("contraste-com-negacao", CONSULTIVA,
+     re.compile(r"\bnão\s+(?:é\s+)?(?:só|apenas|somente)\b[^.!?]{1,80}?,?\s+(?:mas|como\s+também)\b", re.I),
+     "'Não só X, mas também Y' diz o mesmo que 'X e Y', com uma negação a mais. Escreva 'X e Y'."),
+    ("colocacao-do-pronome", CONSULTIVA,
+     re.compile(r"(?:^|(?<=[.!?:…]\s))(?:Me|Te|Lhe|Lhes)\s+[a-zà-ú]+"),
+     "Pronome átono no início da frase, uso do Brasil. Em Portugal, depois do verbo: 'Envie-me o ficheiro'."),
+    ("colocacao-do-pronome", CONSULTIVA,
+     # O infinitivo aceita a ênclise ("não consigo enviar-lhe"), por isso o verbo não pode acabar em "r".
+     re.compile(r"\b(?:não|nunca|já|também|que|quando|onde)\s+[a-zà-ú]+(?<!r)-(?:o|a|os|as|lhe|lhes|me|te|se|nos"
+                r"|vos)\b", re.I),
+     "Depois de 'não', 'que' ou de um advérbio como 'já', o pronome vem antes do verbo: 'O agente não o envia'."),
     ("travessao", CONSULTIVA,
      re.compile(r"(?<=\S)\s*—\s*(?=\S)|(?<=\S)\s+–\s+(?=\S)"),
      "O travessão junta duas ideias (frase encadeada). Considere duas frases, dois-pontos ou parênteses."),
@@ -525,6 +670,7 @@ QUOTE = re.compile(r'"[^"\n]*"|“[^”\n]*”|«[^»\n]*»')
 # <!-- pts-lint: deve-falhar [regra ...] --> ... <!-- pts-lint: fim -->
 DIRECTIVE = re.compile(r"<!--\s*pts-lint:\s*(\S+)(.*?)-->")
 FORMAT_ARG = re.compile(r"\{[^{}\s]*\}")  # {}, {x}, {path:?}, {:>10.6}
+TLDR = re.compile(r"\bTL;DR\b", re.I)  # uma abreviatura, e não um ponto e vírgula
 LINK_DEF = re.compile(r"^ {0,3}\[[^\]]+\]:\s*\S")
 HEADING = re.compile(r"^ {0,3}#{1,6}(?:\s+|$)")
 BLOCKQUOTE = re.compile(r"^ {0,3}(?:>\s?)+")
@@ -788,6 +934,7 @@ def _mask(text, kind):
 
     text = INLINE_CODE.sub(placeholder, text)
     text = INLINE_MATH.sub(placeholder, text)
+    text = TLDR.sub(placeholder, text)
     if kind in ("mensagens", "literais"):
         text = FORMAT_ARG.sub(placeholder, text)
     text = LINK_TARGET.sub(blank, text)
@@ -1674,11 +1821,17 @@ def selftest():
                  "Isto vale no âmbito do projeto.", "Relativamente ao log, nada muda.",
                  "Tendo em conta o limite, pare.", "Isto vale ao nível do servidor."):
         assert "locucao-prolixa" in _rules_of(text), text
-    for text in ("Leve a cabo a análise.", "Dê resposta ao pedido.", "Faça um push da branch.",
-                 "Ponha o servidor a correr."):
+    for text in ("Leve a cabo a análise.", "Dê resposta ao pedido.", "Dê seguimento ao pedido.",
+                 "Faça a gestão das chaves.", "Ponha o servidor a correr."):
         assert "verbo-suporte" in _rules_of(text) or "giria-tecnica" in _rules_of(text), text
-    assert "giria-tecnica" in _rules_of("Faça um push da branch.")
     assert "giria-tecnica" in _rules_of("Pôr o servidor a correr.")
+    # um empréstimo técnico com "fazer" ("fazer deploy") não é gíria. Com verbo português exato, é consultivo.
+    assert _rules_of("Fizemos deploy e merge ontem. Faça merge da branch.") == []
+    for text in ("Faça um push da branch.", "Faça um restart do servidor."):
+        assert [(f["regra"], f["nivel"]) for f in lint(text)[0]] == [("giria-tecnica", CONSULTIVA)], text
+    assert "verbo-suporte" not in _rules_of("Faça um botão novo. Faça o cartão.")
+    # "fazer as sugestões do revisor" é aplicá-las
+    assert "verbo-suporte" not in _rules_of("Faça uma sugestão ao autor. Fiz as sugestões do revisor.")
     # marcas do português do Brasil e tratamento pessoal
     for text in ("Abra o arquivo na tela.", "A equipe lê a requisição.", "Baixe o pacote.", "Acesse o painel.",
                  "O usuário vê o fato.", "O job está rodando.", "A senha expirou."):
@@ -1687,8 +1840,10 @@ def selftest():
                                               "O utilizador descarrega o pacote e acede ao painel.")
     assert "marca-do-brasil" not in _rules_of("O sistema está disponível. O valor está pendente. Está bem.")
     assert all(f["nivel"] == CONSULTIVA for f in lint("A equipe usa o arquivo.")[0] if f["regra"] == "marca-do-brasil")
-    assert "tratamento-pessoal" in _rules_of("Você abre o ficheiro.")
     assert "tratamento-pessoal" in _rules_of("Tu abres o ficheiro.")
+    # o "você" é marca do Brasil, e continua marcado com tratamento-pessoal desligado
+    for text in ("Você abre o ficheiro.", "Vocês abrem o ficheiro."):
+        assert _rules_of(text) == ["marca-do-brasil"], text
     assert "tratamento-pessoal" not in _rules_of("Abra o ficheiro. A ferramenta abre o ficheiro.")
     # grupos de sinónimos de Portugal
     findings, _ = lint("Guarde o ficheiro. Depois grave a cópia.")
@@ -1739,6 +1894,54 @@ def selftest():
     assert "inciso" not in _rules_of("A ASD (AeroSpace and Defence Industries Association of Europe) mantém a norma.")
     findings, _ = lint("# Um\n\n<!-- pts-lint: deve-falhar titulo -->\n#### Salto; mau\n<!-- pts-lint: fim -->\n\n## Dois\n")
     assert not any(f["regra"] == "titulo" for f in findings), findings
+
+    # vocabulário e acentos do Brasil
+    for text in ("Compartilhe o ficheiro.", "Compartilhamos a pasta.", "O planejamento falhou.", "O banco de dados parou.", "O time decidiu.",
+                 "Fale conosco.", "Abra o aplicativo.", "O treinamento acabou.", "O módulo eletrônico.",
+                 "O fenômeno repete-se.", "O gênero da palavra.", "O job está sendo executado."):
+        assert "marca-do-brasil" in _rules_of(text), text
+    assert "marca-do-brasil" not in _rules_of("O timeout e o runtime. O time-to-live expira. O time to first token subiu. Use o time zone UTC. Os pedidos têm o estômago "
+                                              "e a fêmea. O pêndulo e o cêntimo. A frequência contém a ênfase.")
+    assert "marca-do-brasil" not in _rules_of("Rode a chave da API. O agente rodou os tokens. O sistema rodou os "
+                                              "logs.")
+    assert "marca-do-brasil" not in _rules_of("Dêmos o passo. O pêne da fechadura partiu.")
+    # "bilhão", "ao invés de" e "ser preciso"
+    assert [(f["regra"], f["nivel"]) for f in lint("São dois bilhões de pedidos.")[0]] == [
+        ("numero-ambiguo", CONSULTIVA)]
+    assert "palavra-ambigua" in _rules_of("Use a cache ao invés do disco.")
+    assert "palavra-ambigua" in _rules_of("A correção deixa de ser precisa e a tarefa fecha.")
+    assert "palavra-ambigua" not in _rules_of("É preciso reiniciar o job. É preciso que o job pare. Para ler, é "
+                                              "preciso uma chave. Se for preciso outro, crie-o.")
+    # estrangeirismos conjugados
+    for text in ("O repo foi forkado.", "O chart ficou pinado.", "O agente deployou a versão.", "Está por commitar.",
+                 "A branch foi mergeada.", "Vou linkar o ficheiro."):
+        assert "verbo-deformado" in _rules_of(text), text
+    assert "verbo-deformado" in _rules_of("Deployou a versão.")
+    assert _rules_of("Faça merge da branch. A cache guarda o build. Clone o repositório. O advogado leu.") == []
+    assert _rules_of("A Pinar escreveu. O telemóvel huawei falhou. A Huawei respondeu.") == []
+    assert _rules_of("Vou pushar a branch.").count("verbo-deformado") == 1
+    # contraste com uma negação
+    for text in ("Não é um bug, é uma decisão.", "Não serve para produção, serve para testes.",
+                 "É uma decisão, não um bug.", "O teste mede a latência, não o custo.",
+                 "Teste todos os clientes, e não só o primeiro.", "Resolve não só o painel, mas também a lista.",
+                 "Resolve não só o painel como também a lista."):
+        assert "contraste-com-negacao" in _rules_of(text), text
+    for text in ("Se o ficheiro existir, não o apague.", "Quando o job parar, não o reinicie.",
+                 "Não o encontrei, mas procurei.", "O job falhou, e não o reiniciei.", "Feche o ticket, não o apague.",
+                 "Use a API, não a chame duas vezes.", "O agente lê o ficheiro, não o altera.",
+                 "Pare o serviço, e não o reinicie.", "Se não é o DNS, é a firewall.",
+                 "Tudo o que não está na lista, fica bloqueado.", "Guarde o log, não o enviámos.",
+                 "Recebo o ficheiro, não o envio.", "Os clientes pedem a chave, não o terão.",
+                 "O agente lê o ficheiro, não o faz duas vezes."):
+        assert "contraste-com-negacao" not in _rules_of(text), text
+    # colocação do pronome: dois casos mecânicos
+    for text in ("Me envie o ficheiro.", "O job falhou. Lhe dei o log.", "O agente não envia-o.",
+                 "O job que envia-o falhou."):
+        assert "colocacao-do-pronome" in _rules_of(text), text
+    assert "colocacao-do-pronome" not in _rules_of("Envie-me o ficheiro. O agente não o envia. Não consigo "
+                                                   "enviar-lhe o log. O agente envia-o.")
+    # "TL;DR" é uma abreviatura
+    assert "ponto-e-virgula" not in _rules_of("TL;DR: o job falhou.")
 
     checked = _check_repository()
     print("autoteste OK" + (f" (e {checked} ficheiros do repositório)" if checked else ""))

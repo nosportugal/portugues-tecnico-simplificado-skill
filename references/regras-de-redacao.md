@@ -55,7 +55,7 @@ O STE foi escrito para o inglês. Algumas regras passam direto para o português
 |---|---|---|
 | Uma palavra, um significado | Igual. Sem dicionário aprovado, vale só a consistência dentro do documento. Evite também as palavras com dois sentidos no contexto, como "excluir", "carregar", "ligação" e "correr". | Não existe dicionário controlado para o português. "Exclua o ficheiro do pacote" pode ser apagar o ficheiro ou deixar o ficheiro de fora. |
 | Verbo, não substantivo (3.7) | Igual, com foco no verbo-suporte: "efetuar a análise", "realizar o pagamento", "proceder à remoção", "fazer uso de", "dar início a", "levar a cabo". | O verbo-suporte é a forma mais comum de nominalização no português técnico e administrativo. |
-| Sem phrasal verbs (9.3) | Vale para as locuções verbais idiomáticas ("deixar de", "acabar com", "dar conta de", "ficar de") e para a gíria técnica ("subir o servidor", "derrubar o serviço", "fazer um push", "pôr a correr"). | O português não tem a partícula do inglês ("take off"). Mas tem verbos com preposição ou com objeto fixo cujo sentido não vem das partes. "O job deixou de correr" pode ser "parou de executar" ou "não executou desta vez". |
+| Sem phrasal verbs (9.3) | Vale para as locuções verbais idiomáticas ("deixar de", "acabar com", "dar conta de", "ficar de") e para a gíria técnica ("subir o servidor", "derrubar o serviço", "dar um push", "pôr a correr"). | O português não tem a partícula do inglês ("take off"). Mas tem verbos com preposição ou com objeto fixo cujo sentido não vem das partes. "O job deixou de correr" pode ser "parou de executar" ou "não executou desta vez". |
 | Palavra mais simples | Sem locuções prolixas: "de forma a", "por forma a", "tendo em conta que", "no que diz respeito a", "no âmbito de", "a nível de", "sendo que", "encontra-se". | A locução prolixa usa várias palavras no lugar de uma e não acrescenta sentido. |
 | Tempos simples | O pretérito perfeito simples cobre o present perfect. "Tem" + particípio indica repetição, não ação concluída. "Estar a" + infinitivo fica nos relatórios de estado. Sem gerundismo em ações pontuais ("vamos estar a enviar"). | O pretérito perfeito composto do português tem outro sentido. Traduzir o present perfect por ele muda a afirmação. |
 | Formas em "-ing" | Em Portugal, "estar a" + infinitivo faz o papel do gerúndio de ação em curso. Gerúndio só em ações simultâneas. Sem gerúndio depois de vírgula para ações em sequência ou para consequências. | A oração reduzida de gerúndio não diz a relação entre as duas ações. O gerúndio de ação em curso ("está executando") é a norma do Brasil. |
@@ -81,7 +81,12 @@ O português europeu tem palavras próprias para o vocabulário técnico. A skil
 | "rodar", "cadastrar", "gerenciar" | "executar", "registar", "gerir" |
 | "mouse", "celular" | "rato", "telemóvel" |
 | "fato", "contato", "aspecto" | "facto", "contacto", "aspeto" |
-| "está rodando" | "está a executar" |
+| "compartilhar", "planejar", "banco de dados" | "partilhar", "planear", "base de dados" |
+| "o time", "conosco", "aplicativo" | "a equipa", "connosco", "aplicação" |
+| "treinamento" | "formação" ou "treino" |
+| "eletrônico", "fenômeno", "gênero", "acadêmico" | "eletrónico", "fenómeno", "género", "académico" |
+| "bilhão" (mil milhões) | "mil milhões". Em Portugal, "bilião" é um milhão de milhões. |
+| "está rodando", "está sendo executado" | "está a executar", "está a ser executado" |
 
 
 Algumas palavras de Portugal têm mais de um sentido técnico. Sem um glossário do projeto, a skill escolhe a forma sem dupla leitura.
@@ -90,17 +95,19 @@ Algumas palavras de Portugal têm mais de um sentido técnico. Sem um glossário
 - "Ligação" quer dizer hiperligação (link) ou ligação de rede. Escreva "hiperligação" ou "ligação de rede".
 - "Correr" quer dizer executar ou fluir. Prefira "executar".
 - "Registo" quer dizer log ou registo de um dado. Defina o termo uma vez.
+- "Ao invés de" quer dizer "ao contrário de". Para uma troca, escreva "em vez de".
+- "Ser preciso" quer dizer necessário ou exato ("a correção deixa de ser precisa"). Escreva "necessário" ou "exato".
 
 ## Linguagem clara (ISO 24495-1)
 
-A ISO 24495-1:2023 ("Plain language, Part 1: Governing principles and guidelines") fixa quatro princípios. O leitor obtém o que precisa (relevante). Encontra com facilidade (localizável). Entende com facilidade (compreensível). Consegue usar o que entende (utilizável). Portugal adotou a norma como NP ISO 24495-1:2024, "Linguagem clara. Parte 1: Princípios de base e orientações" (CT 221 do IPQ). Os números das cláusulas citados nesta skill seguem a ISO e foram verificados na adoção brasileira, a ABNT NBR ISO 24495-1:2024. Falta verificá-los na NP.
+A ISO 24495-1:2023 ("Plain language, Part 1: Governing principles and guidelines") fixa quatro princípios. O leitor obtém o que precisa (relevante). Encontra com facilidade (localizável). Entende com facilidade (compreensível). Consegue usar o que entende (utilizável). Em Portugal existe a NP ISO 24495-1:2024, "Linguagem clara. Parte 1: Princípios de base e orientações" (CT 221 do IPQ), mas a página do IPQ não diz que a NP adota a ISO. Os números das cláusulas citados nesta skill seguem a ISO e foram verificados na adoção brasileira, a ABNT NBR ISO 24495-1:2024. Falta verificá-los na NP.
 
 A ISO escreve para leitores humanos, e esta skill escreve para agentes. O ficheiro `docs/MAPEAMENTO-ISO-24495-1.md` diz, diretriz a diretriz, o que a skill adotou, o que adaptou e o que não aplica. Os pontos principais:
 
 - A skill adota a mensagem principal primeiro, os títulos descritivos, a informação complementar à parte e o parágrafo de um só tópico. Adota também as siglas por extenso, as palavras precisas e as mesmas palavras para o mesmo sentido.
 - A skill adapta o "conhecer o leitor": fixa quem lê, o objetivo e o contexto antes de reescrever.
 - A skill adapta a avaliação com leitores: o teste passa a ser um agente a executar a tarefa a partir do texto.
-- A skill não aplica o tratamento direto ("tu", "você"), a variação do ritmo das frases nem as imagens.
+- A skill não aplica o tratamento direto ("tu", "você"), a variação do ritmo das frases nem as imagens. Numa mensagem dirigida a uma pessoa, como um comentário num pull request, mantém o tratamento do autor.
 
 Esta skill não é uma ferramenta de linguagem clara para o cidadão. O leitor dela é um leitor técnico ou uma máquina. Cada regra precisa de um motivo de leitura: uma ambiguidade que ela tira.
 
